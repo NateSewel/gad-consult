@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Favicon PNG</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f5f5f5;
+      font-family: system-ui, -apple-system, sans-serif;
+      gap: 20px;
+    }
+    canvas {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    button {
+      padding: 12px 24px;
+      background: #000053;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background: #B22222;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(178, 34, 34, 0.3);
+    }
+    .info {
+      text-align: center;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="info">
+    <h1>GAD Legal Consult Favicon Generator</h1>
+    <p>Click the button below to download the favicon as PNG</p>
+  </div>
+  
+  <canvas id="canvas" width="512" height="512"></canvas>
+  
+  <button onclick="downloadFavicon()">Download favicon.png</button>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Load and draw SVG
+    const img = new Image();
+    img.onload = function() {
+      ctx.drawImage(img, 0, 0, 512, 512);
+    };
+    
+    // Fetch the SVG file
+    fetch('client/public/favicon.svg')
+      .then(r => r.text())
+      .then(svgText => {
+        const blob = new Blob([svgText], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        img.src = url;
+      });
+
+    function downloadFavicon() {
+      canvas.toBlob(function(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'favicon.png';
+        a.click();
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    }
+  </script>
+</body>
+</html>
