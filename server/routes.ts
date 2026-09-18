@@ -3,6 +3,13 @@ import type { Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
+import {
+  requireAdminAuth,
+  verifyPassword,
+  createSessionToken,
+  SESSION_COOKIE_NAME,
+  SESSION_COOKIE_MAX_AGE_SECONDS,
+} from "./auth";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -58,6 +65,48 @@ export async function registerRoutes(
       }
       throw err;
     }
+  });
+
+  app.post(api.admin.login.path, async (req, res) => {
+    try {
+      const input = api.admin.login.input.parse(req.body);
+      const adminEmail = process.env.ADMIN_EMAIL;
+      const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+      if (!adminEmail || !adminPasswordHash) {
+        return res.status(500).json({ message: "Admin auth not configured" });
+      }
+      const emailMatches = input.email.toLowerCase() === adminEmail.toLowerCase();
+      const passwordMatches = verifyPassword(input.password, adminPasswordHash);
+      if (!emailMatches || !passwordMatches) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      res.cookie(SESSION_COOKIE_NAME, createSessionToken(), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: SESSION_COOKIE_MAX_AGE_SECONDS * 1000,
+      });
+      res.json({ ok: true });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const first = err.errors[0];
+        return res.status(400).json({
+          message: first?.message ?? "Invalid request",
+          field: first?.path?.join(".") || undefined,
+        });
+      }
+      throw err;
+    }
+  });
+
+  app.post(api.admin.logout.path, async (_req, res) => {
+    res.clearCookie(SESSION_COOKIE_NAME, { path: "/" });
+    res.json({ ok: true });
+  });
+
+  app.get(api.admin.me.path, requireAdminAuth, async (_req, res) => {
+    res.json({ authenticated: true });
   });
 
   return httpServer;

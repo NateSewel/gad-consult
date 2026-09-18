@@ -43,6 +43,11 @@ export const newsletterSchema = insertNewsletterSubscriptionSchema.extend({
   email: z.string().email("Please enter a valid email"),
 });
 
+export const adminLoginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1),
+});
+
 export const api = {
   public: {
     siteConfig: {
@@ -98,6 +103,32 @@ export const api = {
         201: z.custom<{ ok: true }>(),
         409: errorSchemas.conflict,
         400: errorSchemas.validation,
+      },
+    },
+  },
+  admin: {
+    login: {
+      method: "POST" as const,
+      path: "/api/admin/login" as const,
+      input: adminLoginSchema,
+      responses: {
+        200: z.object({ ok: z.literal(true) }),
+        401: errorSchemas.validation,
+      },
+    },
+    logout: {
+      method: "POST" as const,
+      path: "/api/admin/logout" as const,
+      responses: {
+        200: z.object({ ok: z.literal(true) }),
+      },
+    },
+    me: {
+      method: "GET" as const,
+      path: "/api/admin/me" as const,
+      responses: {
+        200: z.object({ authenticated: z.literal(true) }),
+        401: errorSchemas.validation,
       },
     },
   },
