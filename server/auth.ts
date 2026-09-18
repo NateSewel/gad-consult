@@ -34,7 +34,9 @@ export function createSessionToken(): string {
 
 export function verifySessionToken(token: string | undefined): boolean {
   if (!token) return false;
-  const [payload, signature] = token.split(".");
+  const parts = token.split(".");
+  if (parts.length !== 2) return false;
+  const [payload, signature] = parts;
   if (!payload || !signature) return false;
 
   const expectedSignature = createHmac("sha256", getSessionSecret()).update(payload).digest("hex");
@@ -60,7 +62,13 @@ export function parseCookies(header: string | undefined): Record<string, string>
     if (idx === -1) continue;
     const key = part.slice(0, idx).trim();
     const value = part.slice(idx + 1).trim();
-    if (key) out[key] = decodeURIComponent(value);
+    if (key) {
+      try {
+        out[key] = decodeURIComponent(value);
+      } catch {
+        out[key] = value;
+      }
+    }
   }
   return out;
 }
