@@ -29,6 +29,20 @@ export async function registerRoutes(
     res.json(page);
   });
 
+  app.get(api.blog.list.path, async (_req, res) => {
+    const posts = await storage.listPublishedBlogPosts();
+    res.json(posts);
+  });
+
+  app.get(api.blog.get.path, async (req, res) => {
+    const slug = String(req.params.slug || "");
+    const post = await storage.getPublishedBlogPostBySlug(slug);
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    res.json(post);
+  });
+
   app.post(api.contact.create.path, async (req, res) => {
     try {
       const input = api.contact.create.input.parse(req.body);
@@ -107,6 +121,67 @@ export async function registerRoutes(
 
   app.get(api.admin.me.path, requireAdminAuth, async (_req, res) => {
     res.json({ authenticated: true });
+  });
+
+  app.get(api.admin.posts.list.path, requireAdminAuth, async (_req, res) => {
+    const posts = await storage.listAllBlogPosts();
+    res.json(posts);
+  });
+
+  app.get(api.admin.posts.get.path, requireAdminAuth, async (req, res) => {
+    const id = Number(req.params.id);
+    const post = await storage.getBlogPostById(id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    res.json(post);
+  });
+
+  app.post(api.admin.posts.create.path, requireAdminAuth, async (req, res) => {
+    try {
+      const input = api.admin.posts.create.input.parse(req.body);
+      const created = await storage.createBlogPost(input);
+      res.status(201).json(created);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const first = err.errors[0];
+        return res.status(400).json({
+          message: first?.message ?? "Invalid request",
+          field: first?.path?.join(".") || undefined,
+        });
+      }
+      if ((err as any)?.code === "23505") {
+        return res.status(409).json({ message: "A post with this slug already exists" });
+      }
+      throw err;
+    }
+  });
+
+  app.put(api.admin.posts.update.path, requireAdminAuth, async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const input = api.admin.posts.update.input.parse(req.body);
+      const updated = await storage.updateBlogPost(id, input);
+      if (!updated) return res.status(404).json({ message: "Post not found" });
+      res.json(updated);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const first = err.errors[0];
+        return res.status(400).json({
+          message: first?.message ?? "Invalid request",
+          field: first?.path?.join(".") || undefined,
+        });
+      }
+      if ((err as any)?.code === "23505") {
+        return res.status(409).json({ message: "A post with this slug already exists" });
+      }
+      throw err;
+    }
+  });
+
+  app.delete(api.admin.posts.remove.path, requireAdminAuth, async (req, res) => {
+    const id = Number(req.params.id);
+    const deleted = await storage.deleteBlogPost(id);
+    if (!deleted) return res.status(404).json({ message: "Post not found" });
+    res.json({ ok: true });
   });
 
   return httpServer;

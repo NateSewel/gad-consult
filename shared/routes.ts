@@ -4,6 +4,7 @@ import {
   insertContactSubmissionSchema,
   insertNewsletterSubscriptionSchema,
   seoPages,
+  blogPosts,
 } from "./schema";
 
 export const errorSchemas = {
@@ -47,6 +48,20 @@ export const adminLoginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
 });
+
+export const blogPostInputSchema = z.object({
+  slug: z
+    .string()
+    .min(1)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase letters, numbers, and hyphens"),
+  title: z.string().min(1),
+  excerpt: z.string().min(1),
+  coverImageUrl: z.string().url().optional().nullable(),
+  bodyMarkdown: z.string().min(1),
+  status: z.enum(["draft", "published"]),
+});
+
+export const blogPostUpdateSchema = blogPostInputSchema.partial();
 
 export const api = {
   public: {
@@ -94,6 +109,23 @@ export const api = {
       },
     },
   },
+  blog: {
+    list: {
+      method: "GET" as const,
+      path: "/api/blog/posts" as const,
+      responses: {
+        200: z.array(z.custom<typeof blogPosts.$inferSelect>()),
+      },
+    },
+    get: {
+      method: "GET" as const,
+      path: "/api/blog/posts/:slug" as const,
+      responses: {
+        200: z.custom<typeof blogPosts.$inferSelect>(),
+        404: errorSchemas.notFound,
+      },
+    },
+  },
   newsletter: {
     subscribe: {
       method: "POST" as const,
@@ -131,6 +163,52 @@ export const api = {
         401: errorSchemas.validation,
       },
     },
+    posts: {
+      list: {
+        method: "GET" as const,
+        path: "/api/admin/posts" as const,
+        responses: {
+          200: z.array(z.custom<typeof blogPosts.$inferSelect>()),
+        },
+      },
+      get: {
+        method: "GET" as const,
+        path: "/api/admin/posts/:id" as const,
+        responses: {
+          200: z.custom<typeof blogPosts.$inferSelect>(),
+          404: errorSchemas.notFound,
+        },
+      },
+      create: {
+        method: "POST" as const,
+        path: "/api/admin/posts" as const,
+        input: blogPostInputSchema,
+        responses: {
+          201: z.custom<typeof blogPosts.$inferSelect>(),
+          400: errorSchemas.validation,
+          409: errorSchemas.conflict,
+        },
+      },
+      update: {
+        method: "PUT" as const,
+        path: "/api/admin/posts/:id" as const,
+        input: blogPostUpdateSchema,
+        responses: {
+          200: z.custom<typeof blogPosts.$inferSelect>(),
+          400: errorSchemas.validation,
+          404: errorSchemas.notFound,
+          409: errorSchemas.conflict,
+        },
+      },
+      remove: {
+        method: "DELETE" as const,
+        path: "/api/admin/posts/:id" as const,
+        responses: {
+          200: z.object({ ok: z.literal(true) }),
+          404: errorSchemas.notFound,
+        },
+      },
+    },
   },
 };
 
@@ -157,3 +235,6 @@ export type NewsletterSubscribeInput = z.infer<typeof api.newsletter.subscribe.i
 export type NewsletterSubscribeResponse = z.infer<
   typeof api.newsletter.subscribe.responses[201]
 >;
+export type BlogPostInput = z.infer<typeof blogPostInputSchema>;
+export type BlogPostUpdateInput = z.infer<typeof blogPostUpdateSchema>;
+export type BlogPostResponse = z.infer<typeof api.blog.list.responses[200]>[number];
