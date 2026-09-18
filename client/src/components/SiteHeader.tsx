@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { BrandMark } from "@/components/BrandMark";
 import { PrimaryCTA } from "@/components/PrimaryCTA";
@@ -28,6 +28,7 @@ export function SiteHeader(props: {
 }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [location, navigate] = useLocation();
   const activeSection = useActiveSection(["home", "services", "about", "contact"]);
 
   const orgName = props.site?.organization?.name ?? "GAD Legal Consult";
@@ -42,9 +43,22 @@ export function SiteHeader(props: {
   const navItems = useMemo(() => NAV, []);
 
   function handleNavClick(href: string) {
+    if (location !== "/") {
+      navigate(`/${href}`);
+      setOpen(false);
+      return;
+    }
     const id = href.replace("#", "");
     scrollToId(id);
     setOpen(false);
+  }
+
+  function handleScheduleClick() {
+    if (location !== "/") {
+      navigate("/#contact");
+      return;
+    }
+    props.onSchedule();
   }
 
   return (
@@ -135,7 +149,7 @@ export function SiteHeader(props: {
               </button>
               <PrimaryCTA
                 label="Schedule Consultation"
-                onClick={props.onSchedule}
+                onClick={handleScheduleClick}
                 data-testid="header-primary-cta"
               />
             </div>
@@ -212,7 +226,7 @@ export function SiteHeader(props: {
                   label="Schedule Consultation"
                   onClick={() => {
                     setOpen(false);
-                    props.onSchedule();
+                    handleScheduleClick();
                   }}
                   data-testid="mobile-primary-cta"
                 />
