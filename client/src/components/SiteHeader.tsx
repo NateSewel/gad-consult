@@ -12,6 +12,7 @@ const NAV = [
   { label: "Home", href: "#home", testId: "nav-home" },
   { label: "Services", href: "#services", testId: "nav-services" },
   { label: "About", href: "#about", testId: "nav-about" },
+  { label: "Blog", href: "/blog", testId: "nav-blog" },
   { label: "Contact", href: "#contact", testId: "nav-contact" },
 ] as const;
 
@@ -83,6 +84,19 @@ export function SiteHeader(props: {
 
             <nav className="hidden md:flex items-center gap-1" aria-label="Primary navigation">
               {navItems.map((item) => {
+                const isRoute = item.href.startsWith("/");
+                if (isRoute) {
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="relative rounded-xl px-3 py-2 text-sm font-semibold text-foreground/80 hover:text-foreground hover:bg-muted/70 transition-all duration-200"
+                      data-testid={item.testId}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                }
                 const sectionId = item.href.replace("#", "");
                 const isActive = activeSection === sectionId;
                 return (
@@ -150,6 +164,20 @@ export function SiteHeader(props: {
             <div className="rounded-2xl border border-border/60 bg-card/70 p-3 shadow-sm">
               <div className="grid gap-1">
                 {navItems.map((item) => {
+                  const isRoute = item.href.startsWith("/");
+                  if (isRoute) {
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        className="w-full block rounded-xl px-3 py-2.5 text-left text-sm font-semibold transition-all duration-200 text-foreground/85 hover:bg-muted/70"
+                        data-testid={`${item.testId}-mobile`}
+                      >
+                        {item.label}
+                      </Link>
+                    );
+                  }
                   const sectionId = item.href.replace("#", "");
                   const isActive = activeSection === sectionId;
                   return (

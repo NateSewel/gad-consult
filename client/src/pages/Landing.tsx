@@ -1,4 +1,5 @@
 import { useMemo, useState, useEffect } from "react";
+import { Link } from "wouter";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SectionHeading } from "@/components/SectionHeading";
@@ -910,6 +911,13 @@ export default function Landing() {
                     <FooterLink label="Home" onClick={() => scrollToId("home")} testId="footer-link-home" />
                     <FooterLink label="Services" onClick={() => scrollToId("services")} testId="footer-link-services" />
                     <FooterLink label="About" onClick={() => scrollToId("about")} testId="footer-link-about" />
+                    <Link
+                      href="/blog"
+                      className="text-left rounded-xl px-3 py-2 font-semibold text-foreground/85 hover:text-foreground hover:bg-muted/70 transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/10"
+                      data-testid="footer-link-blog"
+                    >
+                      Blog
+                    </Link>
                     <FooterLink label="Contact" onClick={() => scrollToId("contact")} testId="footer-link-contact" />
                   </div>
 

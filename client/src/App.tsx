@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Landing from "@/pages/Landing";
+import Blog from "@/pages/Blog";
+import BlogPost from "@/pages/BlogPost";
 import { ScrollToAnchor } from "@/components/ScrollToAnchor";
 
 function Router() {
@@ -12,6 +14,8 @@ function Router() {
     <>
       <ScrollToAnchor />
       <Switch>
+        <Route path="/blog" component={Blog} />
+        <Route path="/blog/:slug" component={BlogPost} />
         <Route path="/" component={Landing} />
         {/* Fallback to 404 */}
         <Route component={NotFound} />
