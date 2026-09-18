@@ -52,6 +52,29 @@ export const insertSeoPageSchema = createInsertSchema(seoPages);
 export type InsertSeoPage = z.infer<typeof insertSeoPageSchema>;
 export type SeoPage = typeof seoPages.$inferSelect;
 
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
+  slug: varchar("slug", { length: 200 }).notNull().unique(),
+  title: text("title").notNull(),
+  excerpt: text("excerpt").notNull(),
+  coverImageUrl: text("cover_image_url"),
+  bodyMarkdown: text("body_markdown").notNull(),
+  status: text("status", { enum: ["draft", "published"] }).notNull().default("draft"),
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  publishedAt: true,
+});
+
+export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
+export type BlogPost = typeof blogPosts.$inferSelect;
+
 export type CreateContactSubmissionRequest = InsertContactSubmission;
 export type ContactSubmissionResponse = ContactSubmission;
 
