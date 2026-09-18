@@ -39,4 +39,9 @@ Single-page app (`client/src/pages/Landing.tsx`), routed with Wouter (only `/` +
 `script/build.ts` builds client and server separately, then bundles the server with esbuild into a single `dist/index.cjs`, externalizing all npm deps except an explicit allowlist (kept small deliberately to reduce cold-start `openat` syscalls on Render's free tier).
 
 ### Deployment
-Render.com via `render.yaml` (build: `npm install && npm run build`, start: `npm start`, port 10000). No auth/session middleware is active despite `passport`/`express-session`/`connect-pg-simple` being dependencies — all API endpoints are public.
+Two targets, both built from the same `npm run build`:
+
+- **Render.com** via `render.yaml` (build: `npm install && npm run build`, start: `npm start`, port 10000) — runs `dist/index.cjs` as a long-lived Express server (serves both API and static client).
+- **Vercel** via `vercel.json` (`outputDirectory: dist/public`, rewrites `/api/*` → the `api/index.ts` serverless function). Vercel doesn't run `npm start`/`server/index.ts` — `api/index.ts` is a separate, parallel entry point that builds the same Express app from `registerRoutes()` but exports a request handler instead of calling `.listen()`. **When changing request-handling middleware or route registration, keep `server/index.ts` and `api/index.ts` in sync** — they intentionally duplicate the Express setup (body parsing, error handler) for their respective runtimes.
+
+No auth/session middleware is active despite `passport`/`express-session`/`connect-pg-simple` being dependencies — all API endpoints are public.
