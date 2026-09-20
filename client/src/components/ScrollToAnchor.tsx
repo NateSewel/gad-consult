@@ -5,11 +5,7 @@ export function ScrollToAnchor() {
   const [location] = useLocation();
 
   useEffect(() => {
-    // Support "/#contact" as well as plain "/"
-    const hashIndex = location.indexOf("#");
-    if (hashIndex === -1) return;
-
-    const id = location.slice(hashIndex + 1);
+    const id = window.location.hash.slice(1);
     if (!id) return;
 
     // Defer to allow layout paint / images / fonts.
