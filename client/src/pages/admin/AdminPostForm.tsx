@@ -51,11 +51,16 @@ export function AdminPostForm(props: { mode: "create" | "edit" }) {
     e.preventDefault();
     setError(null);
     try {
-      // coverImageUrl is validated server-side as an optional URL string;
-      // an empty string fails that validation, so omit it entirely when blank.
+      // coverImageUrl is validated server-side as an optional, nullable URL
+      // string; an empty string fails that validation, so send null when
+      // blank. null (not undefined) is required: JSON.stringify drops
+      // undefined keys entirely, and since the update schema is .partial(),
+      // an absent key means "don't change this field" rather than "clear
+      // it" -- so clearing an existing cover image on edit requires an
+      // explicit null to make Drizzle's .set() write NULL.
       const payload: BlogPostInput = {
         ...form,
-        coverImageUrl: form.coverImageUrl?.trim() ? form.coverImageUrl.trim() : undefined,
+        coverImageUrl: form.coverImageUrl?.trim() ? form.coverImageUrl.trim() : null,
       };
       if (props.mode === "create") {
         await create.mutateAsync(payload);

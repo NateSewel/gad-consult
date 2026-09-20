@@ -19,9 +19,15 @@ export function useAdminLogin() {
       await apiRequest("POST", api.admin.login.path, input);
     },
     onSuccess: () => {
-      // Without this, a stale cached `authenticated: false` from an earlier
-      // unauthenticated visit (staleTime: Infinity) would survive login and
-      // bounce the user straight back to /admin/login after AdminLayout mounts.
+      // Write the known-good value into the cache synchronously so that
+      // AdminLayout's remount (right after navigate("/admin")) reads
+      // authenticated === true immediately, instead of a stale cached
+      // `false` that invalidateQueries alone would only mark stale
+      // (it doesn't force a refetch without an active observer, and
+      // AdminLayout's effect would fire on the stale value before the
+      // background refetch resolves, bouncing back to /admin/login).
+      qc.setQueryData([api.admin.me.path], true);
+      // Also invalidate for eventual revalidation against the server.
       qc.invalidateQueries({ queryKey: [api.admin.me.path] });
     },
   });
