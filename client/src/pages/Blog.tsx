@@ -12,7 +12,7 @@ function formatDate(value: Date | string | null) {
 
 export default function Blog() {
   const { data: site } = useSiteConfig();
-  const { data: posts, isLoading } = useBlogPosts();
+  const { data: posts, isLoading, isError } = useBlogPosts();
 
   return (
     <div className="min-h-screen bg-background">
@@ -35,6 +35,13 @@ export default function Blog() {
         {isLoading ? (
           <div className="mt-10 text-sm text-muted-foreground" data-testid="blog-loading">
             Loading posts…
+          </div>
+        ) : isError ? (
+          <div
+            className="mt-10 rounded-3xl border border-border/70 bg-card p-8 text-center text-sm text-muted-foreground"
+            data-testid="blog-error"
+          >
+            Something went wrong loading posts. Please try again shortly.
           </div>
         ) : posts && posts.length > 0 ? (
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6" data-testid="blog-grid">

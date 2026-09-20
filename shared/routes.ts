@@ -53,6 +53,7 @@ export const blogPostInputSchema = z.object({
   slug: z
     .string()
     .min(1)
+    .max(200)
     .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase letters, numbers, and hyphens"),
   title: z.string().min(1),
   excerpt: z.string().min(1),

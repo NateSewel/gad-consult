@@ -112,7 +112,7 @@ export function SiteHeader(props: {
                   );
                 }
                 const sectionId = item.href.replace("#", "");
-                const isActive = activeSection === sectionId;
+                const isActive = location === "/" && activeSection === sectionId;
                 return (
                   <button
                     key={item.href}
@@ -193,7 +193,7 @@ export function SiteHeader(props: {
                     );
                   }
                   const sectionId = item.href.replace("#", "");
-                  const isActive = activeSection === sectionId;
+                  const isActive = location === "/" && activeSection === sectionId;
                   return (
                     <button
                       key={item.href}

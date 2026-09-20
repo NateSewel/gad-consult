@@ -14,7 +14,7 @@ function formatDate(value: Date | string | null) {
 export default function BlogPost() {
   const params = useParams<{ slug: string }>();
   const { data: site } = useSiteConfig();
-  const { data: post, isLoading } = useBlogPost(params.slug);
+  const { data: post, isLoading, isError } = useBlogPost(params.slug);
 
   const jsonLd = post
     ? {
@@ -52,6 +52,13 @@ export default function BlogPost() {
         {isLoading ? (
           <div className="mt-8 text-sm text-muted-foreground" data-testid="blog-post-loading">
             Loading…
+          </div>
+        ) : isError ? (
+          <div
+            className="mt-8 rounded-3xl border border-border/70 bg-card p-8 text-center text-sm text-muted-foreground"
+            data-testid="blog-post-error"
+          >
+            Something went wrong loading this post. Please try again shortly.
           </div>
         ) : !post ? (
           <div
