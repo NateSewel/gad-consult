@@ -38,6 +38,14 @@ Single-page app (`client/src/pages/Landing.tsx`), routed with Wouter (only `/` +
 ### Build output layout
 `script/build.ts` builds client and server separately, then bundles the server with esbuild into a single `dist/index.cjs`, externalizing all npm deps except an explicit allowlist (kept small deliberately to reduce cold-start `openat` syscalls on Render's free tier).
 
+### Blog & Admin
+
+Single-admin auth (`server/auth.ts`): a signed httpOnly cookie (`gad_admin_session`, stdlib `crypto` HMAC — no session table, deliberately stateless for Vercel serverless). Credentials live in env vars: `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH` (scrypt hash, generate with `npm run admin:hash-password -- <password>`), `SESSION_SECRET`. `requireAdminAuth` middleware guards every `/api/admin/*` route except `/api/admin/login`.
+
+Blog posts (`blog_posts` table, `shared/schema.ts`) are Markdown (`bodyMarkdown`, rendered client-side with `react-markdown` on `/blog/:slug`), with a `draft`/`published` status and a `publishedAt` timestamp set once on first publish (not touched by later edits). Public routes (`GET /api/blog/posts`, `GET /api/blog/posts/:slug`) only ever return published posts. Admin CRUD lives at `/api/admin/posts*`, UI at `/admin` (`AdminLayout` client-side-guards these routes by calling `GET /api/admin/me` — the real enforcement is server-side).
+
+Cover images are a pasted URL field, not a real upload — no object storage is wired up.
+
 ### Deployment
 Two targets, both built from the same `npm run build`:
 
