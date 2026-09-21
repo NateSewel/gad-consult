@@ -29,6 +29,11 @@ export function useCreateContactSubmission() {
           const err = parseWithLogging(api.contact.create.responses[400], json, "contact.create.400");
           throw Object.assign(new Error(err.message), { field: err.field, status: 400 });
         }
+        if (res.status === 429) {
+          const json = await res.json();
+          const err = parseWithLogging(api.contact.create.responses[429], json, "contact.create.429");
+          throw Object.assign(new Error(err.message), { field: err.field, status: 429 });
+        }
         throw new Error("Failed to submit contact form");
       }
 

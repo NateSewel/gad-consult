@@ -58,10 +58,58 @@ export async function registerRoutes(
   app.post(api.contact.create.path, async (req, res) => {
     try {
       const input = api.contact.create.input.parse(req.body);
-      const created = await storage.createContactSubmission(input);
+      const ip =
+        (req.headers["x-forwarded-for"] as string | undefined)
+          ?.split(",")[0]
+          ?.trim() ?? null;
+
+      const { website, ...submission } = input;
+      if (website) {
+        // Honeypot tripped: pretend success, persist nothing, don't tip off the bot.
+        return res.status(201).json({
+          id: 0,
+          ...submission,
+          ipAddress: null,
+          createdAt: new Date(),
+        });
+      }
+
+      const recentCount = await storage.countRecentContactSubmissions(
+        ip,
+        submission.email,
+        10,
+      );
+      if (recentCount >= 3) {
+        return res.status(429).json({
+          message: "Too many requests. Please try again in a few minutes.",
+        });
+      }
+
+      const created = await storage.createContactSubmission(submission, ip);
       res.status(201).json(created);
     } catch (err) {
       if (err instanceof z.ZodError) {
+        // A honeypot trip surfaces as a "website" validation error (max(0) rejects
+        // any non-empty value). Treat it the same as the in-handler honeypot check
+        // above: pretend success, persist nothing, don't tip off the bot.
+        const websiteTripped = err.errors.some(
+          (e) => e.path.length === 1 && e.path[0] === "website",
+        );
+        if (websiteTripped) {
+          const body = (req.body ?? {}) as Record<string, unknown>;
+          const asString = (v: unknown) => (typeof v === "string" ? v : "");
+          return res.status(201).json({
+            id: 0,
+            fullName: asString(body.fullName),
+            email: asString(body.email),
+            phone: asString(body.phone),
+            serviceInterestedIn:
+              typeof body.serviceInterestedIn === "string" ? body.serviceInterestedIn : null,
+            message: asString(body.message),
+            ipAddress: null,
+            createdAt: new Date(),
+          });
+        }
         const first = err.errors[0];
         return res.status(400).json({
           message: first?.message ?? "Invalid request",

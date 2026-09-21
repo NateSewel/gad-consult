@@ -1,4 +1,4 @@
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, or, desc, gte, count } from "drizzle-orm";
 import { db } from "./db.js";
 import { contactSubmissions, newsletterSubscriptions, seoPages, blogPosts } from "../shared/schema.js";
 import {
@@ -18,7 +18,14 @@ export interface IStorage {
 
   createContactSubmission(
     input: CreateContactSubmissionRequest,
+    ipAddress: string | null,
   ): Promise<ContactSubmissionResponse>;
+
+  countRecentContactSubmissions(
+    ip: string | null,
+    email: string,
+    sinceMinutesAgo: number,
+  ): Promise<number>;
 
   createNewsletterSubscription(
     input: CreateNewsletterSubscriptionRequest,
@@ -101,12 +108,29 @@ export class DatabaseStorage implements IStorage {
 
   async createContactSubmission(
     input: CreateContactSubmissionRequest,
+    ipAddress: string | null,
   ): Promise<ContactSubmissionResponse> {
     const [created] = await db
       .insert(contactSubmissions)
-      .values(input)
+      .values({ ...input, ipAddress })
       .returning();
     return created;
+  }
+
+  async countRecentContactSubmissions(
+    ip: string | null,
+    email: string,
+    sinceMinutesAgo: number,
+  ): Promise<number> {
+    const since = new Date(Date.now() - sinceMinutesAgo * 60 * 1000);
+    const matchCondition = ip
+      ? or(eq(contactSubmissions.ipAddress, ip), eq(contactSubmissions.email, email))
+      : eq(contactSubmissions.email, email);
+    const [result] = await db
+      .select({ count: count() })
+      .from(contactSubmissions)
+      .where(and(matchCondition, gte(contactSubmissions.createdAt, since)));
+    return result?.count ?? 0;
   }
 
   async getNewsletterSubscriptionByEmail(

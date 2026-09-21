@@ -38,6 +38,7 @@ export const contactFormSchema = insertContactSubmissionSchema.extend({
       "Phone must be Nigerian format (+234XXXXXXXXXX or 0XXXXXXXXXX)",
     ),
   message: z.string().min(10, "Message must be at least 10 characters"),
+  website: z.string().max(0).optional(),
 });
 
 export const newsletterSchema = insertNewsletterSubscriptionSchema.extend({
@@ -107,6 +108,7 @@ export const api = {
       responses: {
         201: z.custom<typeof contactSubmissions.$inferSelect>(),
         400: errorSchemas.validation,
+        429: errorSchemas.validation,
       },
     },
   },

@@ -71,6 +71,18 @@ export function ContactForm(props: { site?: SiteConfigResponse | null }) {
       </div>
 
       <form onSubmit={form.handleSubmit(onSubmit)} className="mt-6 grid gap-4" data-testid="contact-form">
+        <div className="absolute left-[-9999px] w-px h-px overflow-hidden" aria-hidden="true">
+          <label htmlFor="website">Website</label>
+          <input
+            {...form.register("website")}
+            id="website"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field
             label="Full name"
