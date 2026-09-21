@@ -1,8 +1,8 @@
 import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { api, type ContactCreateInput } from "@shared/routes";
-import { useCreateContactSubmission } from "@/hooks/use-contact";
+import { type ContactCreateInput } from "@shared/routes";
+import { useCreateContactSubmission, clientContactSchema } from "@/hooks/use-contact";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Loader2, Send, ShieldCheck } from "lucide-react";
@@ -12,7 +12,7 @@ export function ContactForm(props: { site?: SiteConfigResponse | null }) {
   const { toast } = useToast();
   const mutation = useCreateContactSubmission();
 
-  const schema = useMemo(() => api.contact.create.input, []);
+  const schema = useMemo(() => clientContactSchema, []);
   const form = useForm<ContactCreateInput>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -21,6 +21,7 @@ export function ContactForm(props: { site?: SiteConfigResponse | null }) {
       phone: "",
       serviceInterestedIn: "",
       message: "",
+      website: "",
     },
     mode: "onTouched",
   });

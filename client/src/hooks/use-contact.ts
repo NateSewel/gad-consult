@@ -2,6 +2,19 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, type ContactCreateInput } from "@shared/routes";
 import { z } from "zod";
 
+// The `website` field is a server-side honeypot trap (see server/routes.ts):
+// only the server should ever treat a filled value as meaningful. The real
+// contract schema (`api.contact.create.input`) rejects any non-empty
+// `website` via `.max(0)`, which is correct for the server but wrong on the
+// client — if a password manager autofills that hidden field, client-side
+// Zod validation must not silently block submission. This client-only
+// schema widens just that constraint; everything else stays identical to
+// the real contract, and `website` still travels in the payload so the
+// server's trap keeps working.
+export const clientContactSchema = api.contact.create.input.extend({
+  website: z.string().optional(),
+});
+
 function parseWithLogging<T>(schema: z.ZodSchema<T>, data: unknown, label: string): T {
   const result = schema.safeParse(data);
   if (!result.success) {
@@ -15,7 +28,7 @@ export function useCreateContactSubmission() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (input: ContactCreateInput) => {
-      const validated = api.contact.create.input.parse(input);
+      const validated = clientContactSchema.parse(input);
       const res = await fetch(api.contact.create.path, {
         method: api.contact.create.method,
         headers: { "Content-Type": "application/json" },

@@ -11,6 +11,24 @@ import {
   SESSION_COOKIE_MAX_AGE_SECONDS,
 } from "./auth.js";
 
+// Shared fake-201 response for the contact honeypot trap: mirrors the shape of a
+// real created submission so a bot (or a probing user) can't tell the difference,
+// but nothing is persisted.
+function fakeCreatedResponse(body: Record<string, unknown>) {
+  const asString = (v: unknown) => (typeof v === "string" ? v : "");
+  return {
+    id: 0,
+    fullName: asString(body.fullName),
+    email: asString(body.email),
+    phone: asString(body.phone),
+    serviceInterestedIn:
+      typeof body.serviceInterestedIn === "string" ? body.serviceInterestedIn : null,
+    message: asString(body.message),
+    ipAddress: null,
+    createdAt: new Date(),
+  };
+}
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express,
@@ -56,6 +74,15 @@ export async function registerRoutes(
   });
 
   app.post(api.contact.create.path, async (req, res) => {
+    // Honeypot check happens against the raw body, before Zod ever runs, so it
+    // fires regardless of what other validation issues the body might also have,
+    // and doesn't depend on Zod's internal error shape for "website".
+    const rawBody = (req.body ?? {}) as Record<string, unknown>;
+    if (typeof rawBody.website === "string" && rawBody.website !== "") {
+      // Honeypot tripped: pretend success, persist nothing, don't tip off the bot.
+      return res.status(201).json(fakeCreatedResponse(rawBody));
+    }
+
     try {
       const input = api.contact.create.input.parse(req.body);
       const ip =
@@ -64,15 +91,6 @@ export async function registerRoutes(
           ?.trim() ?? null;
 
       const { website, ...submission } = input;
-      if (website) {
-        // Honeypot tripped: pretend success, persist nothing, don't tip off the bot.
-        return res.status(201).json({
-          id: 0,
-          ...submission,
-          ipAddress: null,
-          createdAt: new Date(),
-        });
-      }
 
       const recentCount = await storage.countRecentContactSubmissions(
         ip,
@@ -89,27 +107,6 @@ export async function registerRoutes(
       res.status(201).json(created);
     } catch (err) {
       if (err instanceof z.ZodError) {
-        // A honeypot trip surfaces as a "website" validation error (max(0) rejects
-        // any non-empty value). Treat it the same as the in-handler honeypot check
-        // above: pretend success, persist nothing, don't tip off the bot.
-        const websiteTripped = err.errors.some(
-          (e) => e.path.length === 1 && e.path[0] === "website",
-        );
-        if (websiteTripped) {
-          const body = (req.body ?? {}) as Record<string, unknown>;
-          const asString = (v: unknown) => (typeof v === "string" ? v : "");
-          return res.status(201).json({
-            id: 0,
-            fullName: asString(body.fullName),
-            email: asString(body.email),
-            phone: asString(body.phone),
-            serviceInterestedIn:
-              typeof body.serviceInterestedIn === "string" ? body.serviceInterestedIn : null,
-            message: asString(body.message),
-            ipAddress: null,
-            createdAt: new Date(),
-          });
-        }
         const first = err.errors[0];
         return res.status(400).json({
           message: first?.message ?? "Invalid request",
