@@ -154,8 +154,8 @@ const FAQS = [
     a: "Yes. Sensitive matters are handled with discretion and professionalism, and contacting us does not create an attorney–client relationship until that's explicitly established.",
   },
   {
-    q: "Where are you based — do you work outside Lagos?",
-    a: "We're based in Lagos, Nigeria, and work with businesses and individuals across Nigeria and beyond.",
+    q: "Where are you based — do you work outside Plateau State?",
+    a: "We're based in Jos, Plateau State, Nigeria, and work with businesses and individuals across Nigeria and beyond.",
   },
   {
     q: "What happens after I submit the contact form?",

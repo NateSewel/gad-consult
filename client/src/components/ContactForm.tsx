@@ -128,14 +128,15 @@ export function ContactForm(props: { site?: SiteConfigResponse | null }) {
               data-testid="contact-service-select"
             >
               <option value="">Select a service</option>
-              <option value="Corporate Advisory">Corporate Advisory</option>
-              <option value="Contract Drafting & Review">Contract Drafting & Review</option>
-              <option value="Litigation & Dispute Resolution">Litigation & Dispute Resolution</option>
-              <option value="Property & Real Estate">Property & Real Estate</option>
-              <option value="Employment & HR Advisory">Employment & HR Advisory</option>
-              <option value="Regulatory Compliance">Regulatory Compliance</option>
+              <option value="Corporate Law & Regulatory Compliance">Corporate Law & Regulatory Compliance</option>
+              <option value="Fintech & Tech">Fintech & Tech</option>
+              <option value="Fintech Licenses">Fintech Licenses</option>
               <option value="Intellectual Property">Intellectual Property</option>
-              <option value="Family & Personal Matters">Family & Personal Matters</option>
+              <option value="Taxation">Taxation</option>
+              <option value="Sports & Entertainment">Sports & Entertainment</option>
+              <option value="Corporate & Commercial Litigation">Corporate & Commercial Litigation</option>
+              <option value="Data Protection & Privacy">Data Protection & Privacy</option>
+              <option value="Real Estate">Real Estate</option>
             </select>
           </Field>
         </div>

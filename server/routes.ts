@@ -203,14 +203,22 @@ export async function registerRoutes(
 
   app.get("/api/admin/submissions/export.csv", requireAdminAuth, async (_req, res) => {
     const submissions = await storage.listContactSubmissions();
-    const escape = (v: string) => `"${v.replace(/"/g, '""')}"`;
+    const sanitizeFormula = (v: string) => (/^[=+\-@]/.test(v) ? `'${v}` : v);
+    const escape = (v: string) => `"${sanitizeFormula(v).replace(/"/g, '""')}"`;
+    const escapePhone = (v: string) => escape(`\t${v}`);
     const header = ["ID", "Full Name", "Email", "Phone", "Service", "Message", "Submitted At"];
     const rows = submissions.map((s) =>
-      [s.id, s.fullName, s.email, s.phone, s.serviceInterestedIn ?? "", s.message, s.createdAt.toISOString()]
-        .map((v) => escape(String(v)))
-        .join(","),
+      [
+        escape(String(s.id)),
+        escape(s.fullName),
+        escape(s.email),
+        escapePhone(s.phone),
+        escape(s.serviceInterestedIn ?? ""),
+        escape(s.message),
+        escape(s.createdAt.toISOString()),
+      ].join(","),
     );
-    const csv = [header.map(escape).join(","), ...rows].join("\r\n");
+    const csv = String.fromCharCode(0xfeff) + [header.map(escape).join(","), ...rows].join("\r\n");
     res.setHeader("Content-Type", "text/csv; charset=utf-8");
     res.setHeader("Content-Disposition", 'attachment; filename="contact-submissions.csv"');
     res.send(csv);
