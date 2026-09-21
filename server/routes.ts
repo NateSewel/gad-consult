@@ -43,6 +43,18 @@ export async function registerRoutes(
     res.json(post);
   });
 
+  app.get("/sitemap.xml", async (_req, res) => {
+    const baseUrl = "https://gad-consult.vercel.app";
+    const posts = await storage.listPublishedBlogPosts();
+    const urls = ["/", "/blog", ...posts.map((p) => `/blog/${p.slug}`)];
+    const xml =
+      `<?xml version="1.0" encoding="UTF-8"?>\n` +
+      `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+      urls.map((url) => `  <url><loc>${baseUrl}${url}</loc></url>`).join("\n") +
+      `\n</urlset>`;
+    res.type("application/xml").send(xml);
+  });
+
   app.post(api.contact.create.path, async (req, res) => {
     try {
       const input = api.contact.create.input.parse(req.body);
