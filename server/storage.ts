@@ -1,6 +1,6 @@
 import { eq, and, desc } from "drizzle-orm";
-import { db } from "./db";
-import { contactSubmissions, newsletterSubscriptions, seoPages, blogPosts } from "@shared/schema";
+import { db } from "./db.js";
+import { contactSubmissions, newsletterSubscriptions, seoPages, blogPosts } from "../shared/schema.js";
 import {
   type CreateContactSubmissionRequest,
   type ContactSubmissionResponse,
@@ -9,7 +9,7 @@ import {
   type SeoPageResponse,
   type BlogPost,
   type InsertBlogPost,
-} from "@shared/schema";
+} from "../shared/schema.js";
 
 export interface IStorage {
   getPublicSiteConfig(): Promise<PublicSiteConfigResponse>;

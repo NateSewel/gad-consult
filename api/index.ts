@@ -2,7 +2,7 @@ import "dotenv/config";
 import express, { type Request, type Response, type NextFunction } from "express";
 import { createServer } from "http";
 import type { IncomingMessage, ServerResponse } from "http";
-import { registerRoutes } from "../server/routes";
+import { registerRoutes } from "../server/routes.js";
 
 const app = express();
 

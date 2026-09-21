@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import type { Server } from "http";
-import { storage } from "./storage";
-import { api } from "@shared/routes";
+import { storage } from "./storage.js";
+import { api } from "../shared/routes.js";
 import { z } from "zod";
 import {
   requireAdminAuth,
@@ -9,7 +9,7 @@ import {
   createSessionToken,
   SESSION_COOKIE_NAME,
   SESSION_COOKIE_MAX_AGE_SECONDS,
-} from "./auth";
+} from "./auth.js";
 
 export async function registerRoutes(
   httpServer: Server,

@@ -5,7 +5,7 @@ import {
   insertNewsletterSubscriptionSchema,
   seoPages,
   blogPosts,
-} from "./schema";
+} from "./schema.js";
 
 export const errorSchemas = {
   validation: z.object({
