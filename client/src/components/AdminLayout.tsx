@@ -1,7 +1,16 @@
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAdminMe, useAdminLogout } from "@/hooks/use-admin";
-import { LayoutDashboard, FileText, Inbox, LogOut } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { BrandMark } from "@/components/BrandMark";
+import {
+  LayoutDashboard,
+  FileText,
+  Inbox,
+  LogOut,
+  PanelLeftClose,
+  PanelLeftOpen,
+} from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard, testid: "overview" },
@@ -18,12 +27,23 @@ export function AdminLayout(props: { children: ReactNode }) {
   const [location, navigate] = useLocation();
   const { data: authenticated, isLoading } = useAdminMe();
   const logout = useAdminLogout();
+  const [collapsed, setCollapsed] = useState(
+    () => localStorage.getItem("admin-sidebar-collapsed") === "true",
+  );
 
   useEffect(() => {
     if (!isLoading && authenticated === false) {
       navigate("/admin/login");
     }
   }, [isLoading, authenticated, navigate]);
+
+  function toggleCollapsed() {
+    setCollapsed((prev) => {
+      const next = !prev;
+      localStorage.setItem("admin-sidebar-collapsed", String(next));
+      return next;
+    });
+  }
 
   if (isLoading) {
     return (
@@ -40,13 +60,49 @@ export function AdminLayout(props: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-background md:flex">
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex md:w-[248px] md:shrink-0 md:flex-col md:border-r md:border-border/70 md:bg-card">
-        <div className="px-6 py-6">
-          <div className="font-display text-lg" data-testid="admin-header-title">
-            GAD Admin
-          </div>
+      <aside
+        className={`hidden md:flex md:shrink-0 md:flex-col md:border-r md:border-border/70 md:bg-card md:transition-[width] md:duration-200 md:ease-out ${
+          collapsed ? "md:w-16" : "md:w-[248px]"
+        }`}
+        data-testid="admin-sidebar"
+      >
+        <div
+          className={`flex items-center gap-2 px-4 py-6 ${
+            collapsed ? "flex-col justify-center px-2" : "justify-between"
+          }`}
+        >
+          {collapsed ? (
+            <div
+              className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary/10"
+              aria-label="GAD Legal Consult brand mark"
+              data-testid="admin-brand-mark-collapsed"
+            >
+              <img
+                src="/images/logo.png"
+                alt="GAD Legal Consult"
+                className="h-8 w-8 object-cover object-left"
+              />
+            </div>
+          ) : (
+            <BrandMark />
+          )}
+          <button
+            type="button"
+            onClick={toggleCollapsed}
+            className={`inline-flex shrink-0 items-center justify-center rounded-xl p-2 text-muted-foreground transition-all duration-200 hover:bg-muted/70 hover:text-foreground ${
+              collapsed ? "mt-2" : ""
+            }`}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            data-testid="admin-sidebar-collapse-toggle"
+          >
+            {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
+          </button>
         </div>
-        <nav className="flex-1 flex flex-col gap-1 px-3" data-testid="admin-sidebar-nav">
+
+        <nav
+          className={`flex-1 flex flex-col gap-1 ${collapsed ? "px-2" : "px-3"}`}
+          data-testid="admin-sidebar-nav"
+        >
           {NAV_ITEMS.map((item) => {
             const active = isActive(location, item.href);
             const Icon = item.icon;
@@ -54,27 +110,36 @@ export function AdminLayout(props: { children: ReactNode }) {
               <Link
                 key={item.href}
                 href={item.href}
+                title={collapsed ? item.label : undefined}
                 className={`inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${
-                  active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/70"
-                }`}
+                  collapsed ? "justify-center px-0" : ""
+                } ${active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/70"}`}
                 data-testid={`admin-nav-${item.testid}`}
               >
-                <Icon className="h-4 w-4" />
-                {item.label}
+                <Icon className="h-4 w-4 shrink-0" />
+                {!collapsed && item.label}
               </Link>
             );
           })}
         </nav>
-        <div className="px-3 py-4 border-t border-border/70">
+        <div
+          className={`flex items-center gap-2 border-t border-border/70 py-4 ${
+            collapsed ? "flex-col px-2" : "justify-between px-3"
+          }`}
+        >
           <button
             type="button"
             onClick={() => logout.mutate()}
-            className="inline-flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-muted-foreground hover:bg-muted/70 transition-all duration-200"
+            title={collapsed ? "Log out" : undefined}
+            className={`inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-muted-foreground transition-all duration-200 hover:bg-muted/70 ${
+              collapsed ? "justify-center px-0" : "flex-1"
+            }`}
             data-testid="admin-logout-button"
           >
-            <LogOut className="h-4 w-4" />
-            Log out
+            <LogOut className="h-4 w-4 shrink-0" />
+            {!collapsed && "Log out"}
           </button>
+          <ThemeToggle data-testid="admin-theme-toggle" />
         </div>
       </aside>
 
@@ -85,6 +150,7 @@ export function AdminLayout(props: { children: ReactNode }) {
             <div className="font-display text-lg" data-testid="admin-header-title-mobile">
               GAD Admin
             </div>
+            <ThemeToggle data-testid="admin-theme-toggle-mobile" />
           </div>
           <nav
             className="flex items-center gap-1 overflow-x-auto px-4 pb-3"

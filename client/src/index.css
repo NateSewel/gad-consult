@@ -52,7 +52,7 @@
   --destructive-foreground: 210 40% 98%;
 
   --chart-1: var(--fire);
-  --chart-2: var(--navy);
+  --chart-2: 234 53% 52%; /* #4451C5 — chart-safe lightened tint of brand navy, validated for CVD separation + contrast against both light and dark chart surfaces via the dataviz skill's validator (the raw brand navy #2B348C fails the lightness-band and dark-surface-contrast checks as a flat chart mark fill) */
   --chart-3: 210 95% 40%;
   --chart-4: 42 92% 48%;
   --chart-5: 160 68% 35%;
