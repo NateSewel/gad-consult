@@ -51,7 +51,7 @@ const SEED_SEO_PAGES: SeoPageResponse[] = [
     slug: "about",
     title: "About | GAD Legal Consult",
     description:
-      "Founded by Victor Momodu, GAD Legal Consult is a forward-thinking law firm built to meet modern legal and regulatory needs.",
+      "Founded by Victor Ayegbeni, GAD Legal Consult is a forward-thinking law firm built to meet modern legal and regulatory needs.",
   },
   {
     slug: "contact",
@@ -67,12 +67,12 @@ export class DatabaseStorage implements IStorage {
       organization: {
         name: "GAD Legal Consult",
         tagline: "A modern Law Firm to meet Modern needs",
-        founder: "Victor Momodu",
+        founder: "Victor Ayegbeni",
       },
       contact: {
         phone: undefined,
         email: undefined,
-        address: undefined,
+        address: "No. 4 Helen Gomwalk Way, off Old Airport Roundabout, Jos, Plateau State",
         officeHours: undefined,
       },
       social: {

@@ -16,6 +16,9 @@ import {
   BadgeCheck,
   BriefcaseBusiness,
   Building2,
+  Calculator,
+  Cpu,
+  FileCheck,
   FileSignature,
   Gavel,
   Handshake,
@@ -27,7 +30,7 @@ import {
   Shield,
   Sparkles,
   Timer,
-  Users,
+  Trophy,
   Mail,
 } from "lucide-react";
 
@@ -70,44 +73,49 @@ const staggerContainer = {
 
 const SERVICES = [
   {
-    title: "Corporate Advisory",
-    description: "Structure, governance, and risk guidance for startups and growing businesses.",
+    title: "Corporate Law & Regulatory Compliance",
+    description: "Structure, governance, and compliance guidance for startups and growing businesses.",
     icon: <Building2 className="h-5 w-5" />,
   },
   {
-    title: "Contract Drafting & Review",
-    description: "Clear, enforceable agreements — aligned to your commercial goals.",
-    icon: <FileSignature className="h-5 w-5" />,
+    title: "Fintech & Tech",
+    description: "Legal support for fintech and technology companies navigating a fast-moving regulatory landscape.",
+    icon: <Cpu className="h-5 w-5" />,
   },
   {
-    title: "Litigation & Dispute Resolution",
+    title: "Fintech Licenses",
+    description: "Licensing strategy and regulatory filings to get fintech ventures operating compliantly.",
+    icon: <FileCheck className="h-5 w-5" />,
+  },
+  {
+    title: "Intellectual Property",
+    description: "Protect your brand, creative works, and innovations with smart filings and strategy.",
+    icon: <Sparkles className="h-5 w-5" />,
+  },
+  {
+    title: "Taxation",
+    description: "Practical tax advisory to keep your business compliant and efficiently structured.",
+    icon: <Calculator className="h-5 w-5" />,
+  },
+  {
+    title: "Sports & Entertainment",
+    description: "Contracts, rights, and representation for athletes, artists, and entertainment ventures.",
+    icon: <Trophy className="h-5 w-5" />,
+  },
+  {
+    title: "Corporate & Commercial Litigation",
     description: "Strategic representation — negotiation first, courtroom-ready when needed.",
     icon: <Gavel className="h-5 w-5" />,
   },
   {
-    title: "Property & Real Estate",
-    description: "Due diligence, documentation, and transaction support for peace of mind.",
-    icon: <Landmark className="h-5 w-5" />,
-  },
-  {
-    title: "Employment & HR Advisory",
-    description: "Policies, contracts, and practical guidance for healthy teams and compliance.",
-    icon: <Users className="h-5 w-5" />,
-  },
-  {
-    title: "Regulatory Compliance",
-    description: "Navigate Nigerian compliance requirements with crisp, actionable steps.",
+    title: "Data Protection & Privacy",
+    description: "Navigate data protection requirements with clear, actionable compliance steps.",
     icon: <Shield className="h-5 w-5" />,
   },
   {
-    title: "Intellectual Property",
-    description: "Protect your brand, creative works, and innovations with smart filings & strategy.",
-    icon: <Sparkles className="h-5 w-5" />,
-  },
-  {
-    title: "Family & Personal Matters",
-    description: "Support for sensitive issues — with discretion, clarity, and empathy.",
-    icon: <Handshake className="h-5 w-5" />,
+    title: "Real Estate",
+    description: "Due diligence, documentation, and transaction support for property matters.",
+    icon: <Landmark className="h-5 w-5" />,
   },
 ] as const;
 
@@ -196,7 +204,7 @@ export default function Landing() {
         name,
         url: window.location.origin,
         description,
-        founder: org?.founder ?? "Victor Momodu",
+        founder: org?.founder ?? "Victor Ayegbeni",
         telephone: phone,
         email,
         address: address
@@ -273,7 +281,7 @@ export default function Landing() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
-            className="absolute inset-0 bg-gradient-to-b from-[#000053]/85 via-[#000053]/75 to-[#111111]/90"
+            className="absolute inset-0 bg-gradient-to-b from-[#2B348C]/85 via-[#2B348C]/75 to-[#111111]/90"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20" />
 
@@ -306,7 +314,7 @@ export default function Landing() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.8, delay: 0.5 }}
-                  className="text-[#e8a0a0]"
+                  className="text-[#F69899]"
                 >
                   Business
                 </motion.span>{" "}
@@ -337,7 +345,7 @@ export default function Landing() {
                   whileTap={{ scale: 0.98 }}
                   className={cn(
                     "group inline-flex items-center justify-center gap-2 rounded-2xl px-7 py-4 text-sm font-semibold",
-                    "bg-[#B22222] text-white border border-[#d43c3c]",
+                    "bg-[#EC1D21] text-white border border-[#EF3F42]",
                     "shadow-lg shadow-red-900/30 hover:shadow-xl hover:shadow-red-900/40",
                     "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30",
                     "transition-shadow duration-200 ease-out",
@@ -540,7 +548,7 @@ export default function Landing() {
                         Founder
                       </div>
                       <div className="mt-1 text-2xl leading-tight" data-testid="founder-name">
-                        Victor Momodu
+                        Victor Ayegbeni
                       </div>
                       <p className="mt-3 text-sm text-muted-foreground leading-relaxed" data-testid="founder-bio">
                         Victor leads GAD Legal Consult with a focus on practical outcomes — helping clients move from uncertainty to decisive action, whether that means drafting stronger contracts, navigating compliance, or resolving disputes strategically.
@@ -604,7 +612,7 @@ export default function Landing() {
             >
               <TeamCard
                 imageSrc="/images/team-founder.jpg"
-                name="Victor Momodu"
+                name="Victor Ayegbeni"
                 role="Founder & Principal Attorney"
                 bio="Victor leads GAD Legal Consult with a focus on practical outcomes — helping clients move from uncertainty to decisive action across corporate, fintech, and compliance matters."
                 isFounder
@@ -790,9 +798,9 @@ export default function Landing() {
                   <InfoCard
                     icon={<MapPin className="h-5 w-5" />}
                     label="Office"
-                    value={contact?.address ?? "Lagos, Nigeria"}
+                    value={contact?.address ?? "No. 4 Helen Gomwalk Way, off Old Airport Roundabout, Jos, Plateau State"}
                     onClick={() => {
-                      navigator.clipboard?.writeText(contact?.address ?? "Lagos, Nigeria");
+                      navigator.clipboard?.writeText(contact?.address ?? "No. 4 Helen Gomwalk Way, off Old Airport Roundabout, Jos, Plateau State");
                       toast({ title: "Copied", description: "Address copied to clipboard." });
                     }}
                     actionLabel="Copy"
@@ -895,7 +903,7 @@ export default function Landing() {
                   </div>
 
                   <div className="mt-5 text-xs text-muted-foreground" data-testid="footer-founder">
-                    Founder: <span className="font-semibold text-foreground/80">{org?.founder ?? "Victor Momodu"}</span>
+                    Founder: <span className="font-semibold text-foreground/80">{org?.founder ?? "Victor Ayegbeni"}</span>
                   </div>
                 </div>
               </div>
@@ -986,7 +994,7 @@ function TeamCard(props: {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.4 }}
-            className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-[#B22222] px-3 py-1.5 text-xs font-semibold text-white shadow-lg"
+            className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-[#EC1D21] px-3 py-1.5 text-xs font-semibold text-white shadow-lg"
           >
             <Scale className="h-3 w-3" />
             Founder
