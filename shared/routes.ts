@@ -210,6 +210,15 @@ export const api = {
         },
       },
     },
+    submissions: {
+      list: {
+        method: "GET" as const,
+        path: "/api/admin/submissions" as const,
+        responses: {
+          200: z.array(z.custom<typeof contactSubmissions.$inferSelect>()),
+        },
+      },
+    },
   },
 };
 
@@ -239,3 +248,4 @@ export type NewsletterSubscribeResponse = z.infer<
 export type BlogPostInput = z.infer<typeof blogPostInputSchema>;
 export type BlogPostUpdateInput = z.infer<typeof blogPostUpdateSchema>;
 export type BlogPostResponse = z.infer<typeof api.blog.list.responses[200]>[number];
+export type SubmissionResponse = z.infer<typeof api.admin.submissions.list.responses[200]>[number];

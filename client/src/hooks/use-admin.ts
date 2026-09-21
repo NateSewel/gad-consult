@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, type BlogPostInput, type BlogPostUpdateInput, type BlogPostResponse } from "@shared/routes";
+import { api, type BlogPostInput, type BlogPostUpdateInput, type BlogPostResponse, type SubmissionResponse } from "@shared/routes";
 import { apiRequest } from "@/lib/queryClient";
 
 export function useAdminMe() {
@@ -102,6 +102,17 @@ export function useDeleteAdminPost() {
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: [api.admin.posts.list.path] });
+    },
+  });
+}
+
+export function useAdminSubmissions() {
+  return useQuery({
+    queryKey: [api.admin.submissions.list.path],
+    queryFn: async () => {
+      const res = await fetch(api.admin.submissions.list.path, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch submissions");
+      return (await res.json()) as SubmissionResponse[];
     },
   });
 }

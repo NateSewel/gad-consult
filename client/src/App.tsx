@@ -11,6 +11,7 @@ import { ScrollToAnchor } from "@/components/ScrollToAnchor";
 import AdminLogin from "@/pages/admin/AdminLogin";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import { AdminPostForm } from "@/pages/admin/AdminPostForm";
+import AdminSubmissions from "@/pages/admin/AdminSubmissions";
 
 function Router() {
   return (
@@ -26,6 +27,7 @@ function Router() {
         <Route path="/admin/posts/:id/edit">
           <AdminPostForm mode="edit" />
         </Route>
+        <Route path="/admin/submissions" component={AdminSubmissions} />
         <Route path="/admin" component={AdminDashboard} />
         <Route path="/" component={Landing} />
         {/* Fallback to 404 */}

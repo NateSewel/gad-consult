@@ -196,5 +196,25 @@ export async function registerRoutes(
     res.json({ ok: true });
   });
 
+  app.get(api.admin.submissions.list.path, requireAdminAuth, async (_req, res) => {
+    const submissions = await storage.listContactSubmissions();
+    res.json(submissions);
+  });
+
+  app.get("/api/admin/submissions/export.csv", requireAdminAuth, async (_req, res) => {
+    const submissions = await storage.listContactSubmissions();
+    const escape = (v: string) => `"${v.replace(/"/g, '""')}"`;
+    const header = ["ID", "Full Name", "Email", "Phone", "Service", "Message", "Submitted At"];
+    const rows = submissions.map((s) =>
+      [s.id, s.fullName, s.email, s.phone, s.serviceInterestedIn ?? "", s.message, s.createdAt.toISOString()]
+        .map((v) => escape(String(v)))
+        .join(","),
+    );
+    const csv = [header.map(escape).join(","), ...rows].join("\r\n");
+    res.setHeader("Content-Type", "text/csv; charset=utf-8");
+    res.setHeader("Content-Disposition", 'attachment; filename="contact-submissions.csv"');
+    res.send(csv);
+  });
+
   return httpServer;
 }

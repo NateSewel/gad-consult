@@ -32,6 +32,8 @@ export interface IStorage {
   createBlogPost(input: InsertBlogPost): Promise<BlogPost>;
   updateBlogPost(id: number, input: Partial<InsertBlogPost>): Promise<BlogPost | undefined>;
   deleteBlogPost(id: number): Promise<boolean>;
+
+  listContactSubmissions(): Promise<ContactSubmissionResponse[]>;
 }
 
 const SEED_SEO_PAGES: SeoPageResponse[] = [
@@ -178,6 +180,10 @@ export class DatabaseStorage implements IStorage {
       .where(eq(blogPosts.id, id))
       .returning({ id: blogPosts.id });
     return result.length > 0;
+  }
+
+  async listContactSubmissions(): Promise<ContactSubmissionResponse[]> {
+    return db.select().from(contactSubmissions).orderBy(desc(contactSubmissions.createdAt));
   }
 }
 
