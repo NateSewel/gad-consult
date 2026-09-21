@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useAdminMe, useAdminLogout } from "@/hooks/use-admin";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { BrandMark } from "@/components/BrandMark";
+import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
   FileText,
@@ -61,15 +62,17 @@ export function AdminLayout(props: { children: ReactNode }) {
     <div className="min-h-screen bg-background md:flex">
       {/* Desktop sidebar */}
       <aside
-        className={`hidden md:flex md:shrink-0 md:flex-col md:border-r md:border-border/70 md:bg-card md:transition-[width] md:duration-200 md:ease-out ${
-          collapsed ? "md:w-16" : "md:w-[248px]"
-        }`}
+        className={cn(
+          "hidden md:flex md:shrink-0 md:flex-col md:overflow-hidden md:border-r md:border-border/70 md:bg-card md:transition-[width] md:duration-200 md:ease-out",
+          collapsed ? "md:w-16" : "md:w-[248px]",
+        )}
         data-testid="admin-sidebar"
       >
         <div
-          className={`flex items-center gap-2 px-4 py-6 ${
-            collapsed ? "flex-col justify-center px-2" : "justify-between"
-          }`}
+          className={cn(
+            "flex items-center gap-2 py-6",
+            collapsed ? "flex-col justify-center px-2" : "justify-between px-4",
+          )}
         >
           {collapsed ? (
             <div
@@ -111,9 +114,11 @@ export function AdminLayout(props: { children: ReactNode }) {
                 key={item.href}
                 href={item.href}
                 title={collapsed ? item.label : undefined}
-                className={`inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold transition-all duration-200 ${
-                  collapsed ? "justify-center px-0" : ""
-                } ${active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/70"}`}
+                className={cn(
+                  "inline-flex items-center gap-2.5 rounded-xl py-2.5 text-sm font-semibold transition-all duration-200",
+                  collapsed ? "justify-center px-0" : "px-3",
+                  active ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/70",
+                )}
                 data-testid={`admin-nav-${item.testid}`}
               >
                 <Icon className="h-4 w-4 shrink-0" />
@@ -131,9 +136,10 @@ export function AdminLayout(props: { children: ReactNode }) {
             type="button"
             onClick={() => logout.mutate()}
             title={collapsed ? "Log out" : undefined}
-            className={`inline-flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-muted-foreground transition-all duration-200 hover:bg-muted/70 ${
-              collapsed ? "justify-center px-0" : "flex-1"
-            }`}
+            className={cn(
+              "inline-flex items-center gap-2.5 rounded-xl py-2.5 text-sm font-semibold text-muted-foreground transition-all duration-200 hover:bg-muted/70",
+              collapsed ? "justify-center px-0" : "flex-1 px-3",
+            )}
             data-testid="admin-logout-button"
           >
             <LogOut className="h-4 w-4 shrink-0" />

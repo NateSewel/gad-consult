@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { Link } from "wouter";
 import { AdminLayout } from "@/components/AdminLayout";
 import { useAdminPosts, useAdminSubmissions } from "@/hooks/use-admin";
@@ -92,6 +93,7 @@ const topServicesConfig = {
 } satisfies ChartConfig;
 
 export default function AdminOverview() {
+  const gradientId = `submissionsFill-${useId().replace(/:/g, "")}`;
   const { data: posts, isLoading: postsLoading } = useAdminPosts();
   const { data: submissions, isLoading: submissionsLoading } = useAdminSubmissions();
 
@@ -184,7 +186,7 @@ export default function AdminOverview() {
                 <ChartContainer config={submissionsOverTimeConfig} className="mt-4 aspect-auto h-64 w-full">
                   <AreaChart data={submissionsOverTime} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
                     <defs>
-                      <linearGradient id="submissionsFill" x1="0" y1="0" x2="0" y2="1">
+                      <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="var(--color-count)" stopOpacity={0.3} />
                         <stop offset="95%" stopColor="var(--color-count)" stopOpacity={0.02} />
                       </linearGradient>
@@ -205,8 +207,7 @@ export default function AdminOverview() {
                       type="monotone"
                       stroke="var(--color-count)"
                       strokeWidth={2}
-                      fill="url(#submissionsFill)"
-                      fillOpacity={0.2}
+                      fill={`url(#${gradientId})`}
                     />
                   </AreaChart>
                 </ChartContainer>
