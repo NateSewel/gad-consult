@@ -9,6 +9,7 @@ import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import { ScrollToAnchor } from "@/components/ScrollToAnchor";
 import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminOverview from "@/pages/admin/AdminOverview";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import { AdminPostForm } from "@/pages/admin/AdminPostForm";
 import AdminSubmissions from "@/pages/admin/AdminSubmissions";
@@ -28,7 +29,8 @@ function Router() {
           <AdminPostForm mode="edit" />
         </Route>
         <Route path="/admin/submissions" component={AdminSubmissions} />
-        <Route path="/admin" component={AdminDashboard} />
+        <Route path="/admin/posts" component={AdminDashboard} />
+        <Route path="/admin" component={AdminOverview} />
         <Route path="/" component={Landing} />
         {/* Fallback to 404 */}
         <Route component={NotFound} />

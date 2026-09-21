@@ -67,7 +67,7 @@ export function AdminPostForm(props: { mode: "create" | "edit" }) {
       } else {
         await update.mutateAsync(payload);
       }
-      navigate("/admin");
+      navigate("/admin/posts");
     } catch (err: any) {
       setError(err?.message ?? "Failed to save post.");
     }

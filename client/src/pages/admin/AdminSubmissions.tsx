@@ -17,9 +17,19 @@ export default function AdminSubmissions() {
   return (
     <AdminLayout>
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold" data-testid="admin-submissions-title">
-          Submissions
-        </h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold" data-testid="admin-submissions-title">
+            Submissions
+          </h1>
+          {submissions && submissions.length > 0 ? (
+            <span
+              className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground"
+              data-testid="admin-submissions-count"
+            >
+              {submissions.length}
+            </span>
+          ) : null}
+        </div>
         <a
           href="/api/admin/submissions/export.csv"
           className="rounded-2xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-md"

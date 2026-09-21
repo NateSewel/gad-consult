@@ -9,9 +9,19 @@ export default function AdminDashboard() {
   return (
     <AdminLayout>
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold" data-testid="admin-dashboard-title">
-          Posts
-        </h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold" data-testid="admin-dashboard-title">
+            Posts
+          </h1>
+          {posts && posts.length > 0 ? (
+            <span
+              className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground"
+              data-testid="admin-posts-count"
+            >
+              {posts.length}
+            </span>
+          ) : null}
+        </div>
         <Link
           href="/admin/posts/new"
           className="rounded-2xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-md"
