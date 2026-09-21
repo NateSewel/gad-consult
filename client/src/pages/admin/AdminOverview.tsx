@@ -60,7 +60,7 @@ export default function AdminOverview() {
       ) : (
         <>
           <div
-            className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
+            className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4"
             data-testid="admin-stats-grid"
           >
             <StatCard label="Total Posts" value={totalPosts} icon={FileText} testid="admin-stat-total-posts" />
@@ -104,9 +104,9 @@ export default function AdminOverview() {
                     className="flex items-center justify-between gap-4 rounded-2xl border border-border/70 bg-background px-4 py-3"
                     data-testid={`admin-recent-submission-row-${submission.id}`}
                   >
-                    <div className="min-w-0">
-                      <span className="font-semibold truncate">{submission.fullName}</span>
-                      <span className="ml-2 text-xs text-muted-foreground truncate">
+                    <div className="flex min-w-0 flex-1 items-baseline gap-2">
+                      <span className="min-w-0 flex-1 truncate font-semibold">{submission.fullName}</span>
+                      <span className="max-w-[40%] shrink-0 truncate text-xs text-muted-foreground">
                         {submission.email}
                       </span>
                     </div>
