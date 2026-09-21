@@ -2,13 +2,12 @@ import { useId } from "react";
 import { Link } from "wouter";
 import { AdminLayout } from "@/components/AdminLayout";
 import { useAdminPosts, useAdminSubmissions } from "@/hooks/use-admin";
-import { FileText, CheckCircle2, FileEdit, Inbox, TrendingUp } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { FileText, CheckCircle2, FileEdit, Inbox, Plus } from "lucide-react";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  ChartLegend,
-  ChartLegendContent,
   type ChartConfig,
 } from "@/components/ui/chart";
 import {
@@ -31,7 +30,14 @@ function formatDate(value: Date | string) {
   });
 }
 
-function StatCard(props: { label: string; value: number; icon: typeof FileText; testid: string }) {
+function StatCard(props: {
+  label: string;
+  value: number;
+  caption?: string;
+  icon: typeof FileText;
+  iconClassName: string;
+  testid: string;
+}) {
   const Icon = props.icon;
   return (
     <div
@@ -39,14 +45,22 @@ function StatCard(props: { label: string; value: number; icon: typeof FileText; 
       data-testid={props.testid}
     >
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-muted-foreground">{props.label}</span>
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+        <span className="text-sm font-medium text-muted-foreground">{props.label}</span>
+        <span
+          className={cn(
+            "grid h-10 w-10 shrink-0 place-items-center rounded-full",
+            props.iconClassName,
+          )}
+        >
           <Icon className="h-4 w-4" />
         </span>
       </div>
-      <div className="mt-3 text-3xl font-semibold" data-testid={`${props.testid}-value`}>
+      <div className="mt-3 text-3xl font-bold" data-testid={`${props.testid}-value`}>
         {props.value}
       </div>
+      {props.caption ? (
+        <div className="mt-1.5 text-xs text-muted-foreground">{props.caption}</div>
+      ) : null}
     </div>
   );
 }
@@ -149,37 +163,135 @@ export default function AdminOverview() {
 
   return (
     <AdminLayout>
-      <h1 className="text-2xl font-semibold" data-testid="admin-overview-title">
-        Overview
-      </h1>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold" data-testid="admin-overview-title">
+            Welcome back
+          </h1>
+          <p className="mt-1.5 text-muted-foreground" data-testid="admin-overview-subtitle">
+            Manage posts and track submissions, all in one place.
+          </p>
+        </div>
+        <Link
+          href="/admin/posts/new"
+          className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
+          data-testid="admin-overview-new-post"
+        >
+          <Plus className="h-4 w-4" />
+          New post
+        </Link>
+      </div>
 
       {isLoading ? (
         <div className="mt-8 text-sm text-muted-foreground">Loading…</div>
       ) : (
         <>
           <div
-            className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4"
+            className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
             data-testid="admin-stats-grid"
           >
-            <StatCard label="Total Posts" value={totalPosts} icon={FileText} testid="admin-stat-total-posts" />
-            <StatCard label="Published" value={published} icon={CheckCircle2} testid="admin-stat-published" />
-            <StatCard label="Drafts" value={drafts} icon={FileEdit} testid="admin-stat-drafts" />
+            <StatCard
+              label="Total Posts"
+              value={totalPosts}
+              icon={FileText}
+              iconClassName="bg-chart-2/10 text-chart-2"
+              testid="admin-stat-total-posts"
+            />
+            <StatCard
+              label="Published"
+              value={published}
+              icon={CheckCircle2}
+              iconClassName="bg-chart-5/10 text-chart-5"
+              testid="admin-stat-published"
+            />
+            <StatCard
+              label="Drafts"
+              value={drafts}
+              icon={FileEdit}
+              iconClassName="bg-muted text-muted-foreground"
+              testid="admin-stat-drafts"
+            />
             <StatCard
               label="Total Submissions"
               value={totalSubmissions}
+              caption={`+${thisWeek} this week`}
               icon={Inbox}
+              iconClassName="bg-primary/10 text-primary"
               testid="admin-stat-total-submissions"
             />
-            <StatCard label="This Week" value={thisWeek} icon={TrendingUp} testid="admin-stat-this-week" />
           </div>
 
-          <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Chart B: Posts by status */}
+            <div
+              className="lg:col-span-5 rounded-3xl border border-border/70 bg-card p-6 shadow-sm"
+              data-testid="admin-chart-posts-by-status"
+            >
+              <h2 className="text-lg font-semibold">Posts by status</h2>
+              <p className="text-sm text-muted-foreground">Where your content stands right now</p>
+              {totalPosts === 0 ? (
+                <EmptyChartState message="No data yet." testid="admin-chart-posts-by-status-empty" />
+              ) : (
+                <>
+                  <div className="relative mx-auto mt-4 h-56 w-56">
+                    <ChartContainer config={postsByStatusConfig} className="aspect-square h-56 w-56">
+                      <PieChart>
+                        <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                        <Pie
+                          data={postsByStatus}
+                          dataKey="value"
+                          nameKey="name"
+                          innerRadius={64}
+                          outerRadius={96}
+                          strokeWidth={2}
+                        >
+                          {postsByStatus.map((entry) => (
+                            <Cell key={entry.name} fill={`var(--color-${entry.name})`} />
+                          ))}
+                        </Pie>
+                      </PieChart>
+                    </ChartContainer>
+                    <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                      <span className="text-3xl font-bold">{totalPosts}</span>
+                      <span className="text-xs text-muted-foreground">posts</span>
+                    </div>
+                  </div>
+                  <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
+                    {postsByStatus.map((entry) => (
+                      <div
+                        key={entry.name}
+                        className="flex items-center justify-between gap-2 text-sm"
+                        data-testid={`admin-posts-by-status-legend-${entry.name}`}
+                      >
+                        <span className="flex items-center gap-2 text-muted-foreground">
+                          <span
+                            className={cn(
+                              "h-2 w-2 rounded-full",
+                              entry.name === "published" ? "bg-chart-2" : "bg-chart-1",
+                            )}
+                          />
+                          {entry.label}
+                        </span>
+                        <span className="font-semibold">
+                          {entry.value}{" "}
+                          <span className="font-normal text-muted-foreground">
+                            {totalPosts > 0 ? Math.round((entry.value / totalPosts) * 100) : 0}%
+                          </span>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
             {/* Chart A: Submissions over time */}
             <div
-              className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm lg:col-span-2"
+              className="lg:col-span-7 rounded-3xl border border-border/70 bg-card p-6 shadow-sm"
               data-testid="admin-chart-submissions-over-time"
             >
-              <h2 className="text-lg font-semibold">Submissions Over Time</h2>
+              <h2 className="text-lg font-semibold">Submissions over time</h2>
+              <p className="text-sm text-muted-foreground">Last 30 days</p>
               {totalSubmissions === 0 ? (
                 <EmptyChartState message="No data yet." testid="admin-chart-submissions-over-time-empty" />
               ) : (
@@ -213,64 +325,35 @@ export default function AdminOverview() {
                 </ChartContainer>
               )}
             </div>
+          </div>
 
-            {/* Chart B: Posts by status */}
-            <div
-              className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm"
-              data-testid="admin-chart-posts-by-status"
-            >
-              <h2 className="text-lg font-semibold">Posts by Status</h2>
-              {totalPosts === 0 ? (
-                <EmptyChartState message="No data yet." testid="admin-chart-posts-by-status-empty" />
-              ) : (
-                <ChartContainer config={postsByStatusConfig} className="mt-4 aspect-auto h-64 w-full">
-                  <PieChart>
-                    <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-                    <Pie
-                      data={postsByStatus}
-                      dataKey="value"
-                      nameKey="name"
-                      innerRadius={56}
-                      outerRadius={84}
-                      strokeWidth={2}
-                    >
-                      {postsByStatus.map((entry) => (
-                        <Cell key={entry.name} fill={`var(--color-${entry.name})`} />
-                      ))}
-                    </Pie>
-                    <ChartLegend content={<ChartLegendContent nameKey="name" />} />
-                  </PieChart>
-                </ChartContainer>
-              )}
-            </div>
-
-            {/* Chart C: Top requested services */}
-            <div
-              className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm"
-              data-testid="admin-chart-top-services"
-            >
-              <h2 className="text-lg font-semibold">Top Requested Services</h2>
-              {topServices.length === 0 ? (
-                <EmptyChartState message="No data yet." testid="admin-chart-top-services-empty" />
-              ) : (
-                <ChartContainer config={topServicesConfig} className="mt-4 aspect-auto h-64 w-full">
-                  <BarChart data={topServices} layout="vertical" margin={{ left: 8, right: 16, top: 8, bottom: 0 }}>
-                    <CartesianGrid horizontal={false} stroke="hsl(var(--border))" strokeOpacity={0.6} />
-                    <XAxis type="number" tickLine={false} axisLine={false} allowDecimals={false} />
-                    <YAxis
-                      type="category"
-                      dataKey="service"
-                      tickLine={false}
-                      axisLine={false}
-                      width={110}
-                      tick={{ fontSize: 11 }}
-                    />
-                    <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-                    <Bar dataKey="count" name="count" fill="var(--color-count)" radius={[0, 6, 6, 0]} />
-                  </BarChart>
-                </ChartContainer>
-              )}
-            </div>
+          {/* Chart C: Top requested services */}
+          <div
+            className="mt-8 rounded-3xl border border-border/70 bg-card p-6 shadow-sm"
+            data-testid="admin-chart-top-services"
+          >
+            <h2 className="text-lg font-semibold">Top requested services</h2>
+            <p className="text-sm text-muted-foreground">Most common service interest from submissions</p>
+            {topServices.length === 0 ? (
+              <EmptyChartState message="No data yet." testid="admin-chart-top-services-empty" />
+            ) : (
+              <ChartContainer config={topServicesConfig} className="mt-4 aspect-auto h-64 w-full">
+                <BarChart data={topServices} layout="vertical" margin={{ left: 8, right: 16, top: 8, bottom: 0 }}>
+                  <CartesianGrid horizontal={false} stroke="hsl(var(--border))" strokeOpacity={0.6} />
+                  <XAxis type="number" tickLine={false} axisLine={false} allowDecimals={false} />
+                  <YAxis
+                    type="category"
+                    dataKey="service"
+                    tickLine={false}
+                    axisLine={false}
+                    width={110}
+                    tick={{ fontSize: 11 }}
+                  />
+                  <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                  <Bar dataKey="count" name="count" fill="var(--color-count)" radius={[0, 6, 6, 0]} />
+                </BarChart>
+              </ChartContainer>
+            )}
           </div>
 
           <div className="mt-8 rounded-3xl border border-border/70 bg-card p-6 shadow-sm">
