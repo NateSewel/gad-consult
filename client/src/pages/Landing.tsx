@@ -526,33 +526,36 @@ export default function Landing() {
               data-testid="how-it-works-heading"
             />
 
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
-              className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-5"
-              data-testid="how-it-works-grid"
-            >
-              {PROCESS_STEPS.map((step) => (
-                <motion.div
-                  key={step.step}
-                  variants={fadeInUp}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="rounded-3xl border border-border/70 bg-card p-6 shadow-sm"
-                  data-testid={`how-it-works-step-${step.step}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary/75 text-primary-foreground shadow-md shadow-primary/20">
+            <div className="relative mt-14">
+              <div className="pointer-events-none absolute left-[16.6%] right-[16.6%] top-[1.375rem] hidden h-px bg-border md:block" />
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={staggerContainer}
+                className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6"
+                data-testid="how-it-works-grid"
+              >
+                {PROCESS_STEPS.map((step) => (
+                  <motion.div
+                    key={step.step}
+                    variants={fadeInUp}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex items-start gap-4 md:flex-col md:items-center md:text-center"
+                    data-testid={`how-it-works-step-${step.step}`}
+                  >
+                    <div className="relative z-10 grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground shadow-md shadow-primary/20 ring-8 ring-background">
                       {step.icon}
                     </div>
-                    <span className="text-3xl font-bold text-muted-foreground/30">{step.step}</span>
-                  </div>
-                  <div className="mt-4 text-lg font-semibold leading-tight">{step.title}</div>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
+                    <div className="md:mt-5">
+                      <div className="text-sm font-bold text-secondary">Step {step.step}</div>
+                      <div className="mt-1 text-lg font-semibold leading-tight">{step.title}</div>
+                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed md:mx-auto md:max-w-[220px]">{step.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
           </div>
 
           <div className="h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
@@ -720,12 +723,21 @@ export default function Landing() {
               whileInView="visible"
               viewport={{ once: true, margin: "-100px" }}
               variants={staggerContainer}
-              className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6"
+              className="mt-10 space-y-6"
               data-testid="testimonials-grid"
             >
-              {TESTIMONIALS.map((t, idx) => (
-                <TestimonialCard key={t.name} name={t.name} service={t.service} quote={t.quote} testId={`testimonial-card-${idx + 1}`} />
-              ))}
+              <TestimonialCard
+                name={TESTIMONIALS[1].name}
+                service={TESTIMONIALS[1].service}
+                quote={TESTIMONIALS[1].quote}
+                testId="testimonial-card-1"
+                featured
+              />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {[TESTIMONIALS[0], TESTIMONIALS[2], TESTIMONIALS[3]].map((t, idx) => (
+                  <TestimonialCard key={t.name} name={t.name} service={t.service} quote={t.quote} testId={`testimonial-card-${idx + 2}`} />
+                ))}
+              </div>
             </motion.div>
           </div>
 
@@ -1104,20 +1116,26 @@ function FeatureLine(props: { icon: React.ReactNode; title: string; desc: string
   );
 }
 
-function TestimonialCard(props: { name: string; service: string | null; quote: string; testId: string }) {
+function TestimonialCard(props: { name: string; service: string | null; quote: string; testId: string; featured?: boolean }) {
   return (
     <motion.div
       variants={fadeInUp}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       whileHover={{ y: -8, transition: { duration: 0.3 } }}
-      className="group rounded-3xl border border-border/70 bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-border"
+      className={cn(
+        "group rounded-3xl border border-border/70 bg-card shadow-sm transition-all duration-300 hover:shadow-lg hover:border-border",
+        props.featured ? "p-8 sm:p-10" : "p-6",
+      )}
       data-testid={props.testId}
     >
-      <Quote className="h-6 w-6 text-primary/40" />
-      <p className="mt-3 text-base leading-relaxed text-foreground" data-testid={`${props.testId}-quote`}>
+      <Quote className={cn("text-primary/40", props.featured ? "h-9 w-9" : "h-6 w-6")} />
+      <p
+        className={cn("leading-relaxed text-foreground", props.featured ? "mt-4 text-xl sm:text-2xl font-display max-w-2xl" : "mt-3 text-base")}
+        data-testid={`${props.testId}-quote`}
+      >
         "{props.quote}"
       </p>
-      <div className="mt-4 text-sm">
+      <div className={cn(props.featured ? "mt-6 text-base" : "mt-4 text-sm")}>
         <div className="font-semibold" data-testid={`${props.testId}-name`}>{props.name}</div>
         {props.service ? <div className="text-muted-foreground">{props.service}</div> : null}
       </div>
