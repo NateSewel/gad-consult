@@ -1045,7 +1045,7 @@ function TeamCard(props: {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3, duration: 0.4 }}
-            className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-[#EC1D21] px-3 py-1.5 text-xs font-semibold text-white shadow-lg"
+            className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-lg"
           >
             <Scale className="h-3 w-3" />
             Founder
