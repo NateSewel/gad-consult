@@ -374,7 +374,7 @@ export default function Landing() {
                   whileTap={{ scale: 0.98 }}
                   className={cn(
                     "group inline-flex items-center justify-center gap-2 rounded-2xl px-7 py-4 text-sm font-semibold",
-                    "bg-[#EC1D21] text-white border border-[#EF3F42]",
+                    "bg-primary text-primary-foreground border border-primary-border",
                     "shadow-lg shadow-red-900/30 hover:shadow-xl hover:shadow-red-900/40",
                     "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30",
                     "transition-shadow duration-200 ease-out",
@@ -510,7 +510,6 @@ export default function Landing() {
         <section id="how-it-works" className="relative" data-testid="section-how-it-works">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
             <SectionHeading
-              eyebrow="How it works"
               title="A simple path from first message to next steps."
               description="No jargon, no runaround — just a clear process from the moment you reach out."
               align="center"
@@ -555,7 +554,6 @@ export default function Landing() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
               <div className="lg:col-span-5" data-testid="about-left">
                 <SectionHeading
-                  eyebrow="About"
                   title="Attorney-led, detail-obsessed, built for real life."
                   description="Your matter deserves more than generic templates. We combine careful legal reasoning with practical execution."
                   data-testid="about-heading"
@@ -626,7 +624,6 @@ export default function Landing() {
         <section id="team" className="relative" data-testid="section-team">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
             <SectionHeading
-              eyebrow="Our Team"
               title="The people behind your legal strategy."
               description="A dedicated team of professionals committed to delivering clear, results-driven counsel."
               align="center"
@@ -673,7 +670,6 @@ export default function Landing() {
         <section className="relative" data-testid="section-why">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
             <SectionHeading
-              eyebrow="Why choose us"
               title="A sharper process — built around your outcomes."
               description="We don’t just advise. We map the path, reduce uncertainty, and execute with professional precision."
               align="center"
@@ -688,12 +684,12 @@ export default function Landing() {
               className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
               data-testid="why-grid"
             >
-              <WhyCard icon={<Shield className="h-5 w-5" />} title="Risk-aware guidance" desc="We help you anticipate issues and document decisions properly." />
-              <WhyCard icon={<Handshake className="h-5 w-5" />} title="Human, not robotic" desc="We explain clearly and collaborate with respect for your time." />
-              <WhyCard icon={<Landmark className="h-5 w-5" />} title="Nigeria-context expertise" desc="Practical advice grounded in the realities of local systems." />
-              <WhyCard icon={<FileSignature className="h-5 w-5" />} title="Documents that hold up" desc="Contracts and filings built to be enforceable, not generic." />
-              <WhyCard icon={<Gavel className="h-5 w-5" />} title="Dispute readiness" desc="Strong positions and a negotiation-first mindset." />
-              <WhyCard icon={<Timer className="h-5 w-5" />} title="Momentum-focused" desc="The work that unlocks your next milestone — prioritized." />
+              <WhyCard icon={<Shield className="h-5 w-5" />} title="Risk-aware guidance" desc="We help you anticipate issues and document decisions properly." closer="The paper trail that protects you if things go sideways." />
+              <WhyCard icon={<Handshake className="h-5 w-5" />} title="Human, not robotic" desc="We explain clearly and collaborate with respect for your time." closer="No jargon dumps — just a straight answer to your question." />
+              <WhyCard icon={<Landmark className="h-5 w-5" />} title="Nigeria-context expertise" desc="Practical advice grounded in the realities of local systems." closer="Built for how things actually work here, not a textbook." />
+              <WhyCard icon={<FileSignature className="h-5 w-5" />} title="Documents that hold up" desc="Contracts and filings built to be enforceable, not generic." closer="Reviewed for the clause that gets argued over later." />
+              <WhyCard icon={<Gavel className="h-5 w-5" />} title="Dispute readiness" desc="Strong positions and a negotiation-first mindset." closer="Positioned to settle fast, or hold firm if it goes further." />
+              <WhyCard icon={<Timer className="h-5 w-5" />} title="Momentum-focused" desc="The work that unlocks your next milestone — prioritized." closer="Fewer status-check emails, more actual progress." />
             </motion.div>
           </div>
 
@@ -704,7 +700,6 @@ export default function Landing() {
         <section className="relative" data-testid="section-testimonials">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
             <SectionHeading
-              eyebrow="Client Reviews"
               title="What our clients say."
               align="center"
               data-testid="testimonials-heading"
@@ -731,7 +726,6 @@ export default function Landing() {
         <section id="faq" className="relative" data-testid="section-faq">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
             <SectionHeading
-              eyebrow="FAQ"
               title="Common questions before you reach out."
               align="center"
               data-testid="faq-heading"
@@ -824,7 +818,6 @@ export default function Landing() {
                 data-testid="contact-left"
               >
                 <SectionHeading
-                  eyebrow="Contact"
                   title="Tell us what’s happening. We’ll respond with next steps."
                   description="Provide the essentials — we’ll reply with guidance, timelines, and what to prepare for a consultation."
                   data-testid="contact-heading"
@@ -1148,7 +1141,7 @@ function AboutChip(props: { icon: React.ReactNode; title: string; desc: string }
   );
 }
 
-function WhyCard(props: { icon: React.ReactNode; title: string; desc: string }) {
+function WhyCard(props: { icon: React.ReactNode; title: string; desc: string; closer: string }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -1172,7 +1165,7 @@ function WhyCard(props: { icon: React.ReactNode; title: string; desc: string }) 
         </div>
       </div>
       <div className="mt-5 h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
-      <div className="mt-4 text-xs text-muted-foreground">Designed to reduce uncertainty — and keep you moving.</div>
+      <div className="mt-4 text-xs text-muted-foreground">{props.closer}</div>
     </motion.div>
   );
 }

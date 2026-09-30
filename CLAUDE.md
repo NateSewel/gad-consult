@@ -46,6 +46,10 @@ Blog posts (`blog_posts` table, `shared/schema.ts`) are Markdown (`bodyMarkdown`
 
 Cover images are a pasted URL field, not a real upload — no object storage is wired up.
 
+### Design Context
+
+`PRODUCT.md` (register: brand — lead-gen marketing site) and `DESIGN.md` (visual system: Institutional Navy + Firebrick Red, Fraunces display / IBM Plex Sans body, soft ambient shadows) capture the project's design system for the `impeccable` skill. Five standing principles from PRODUCT.md: reduce uncertainty at every step, practice what you preach, show don't tell, human not robotic, momentum over exhaustiveness. Read both before any design-facing change.
+
 ### Deployment
 Two targets, both built from the same `npm run build`:
 

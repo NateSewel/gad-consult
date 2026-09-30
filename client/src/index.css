@@ -17,7 +17,7 @@
 
   /* Brand */
   --navy: 234 53% 36%; /* #2B348C */
-  --fire: 359 84% 52%; /* #EC1D21 */
+  --fire: 359 84% 48%; /* #E11417 — darkened from 52% L for WCAG AA (white-on-fire button text was 4.41:1, now clears 4.5:1) */
   --ink: 0 0% 7%; /* #111111 */
 
   /* Light theme */

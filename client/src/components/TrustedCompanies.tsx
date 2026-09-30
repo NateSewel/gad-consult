@@ -37,7 +37,6 @@ export function TrustedCompanies() {
     <section className="relative py-16 sm:py-20" data-testid="section-trusted-companies">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Trusted By"
           title="Businesses that trust our counsel"
           align="center"
           data-testid="trusted-companies-heading"
