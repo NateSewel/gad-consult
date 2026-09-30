@@ -277,6 +277,14 @@
     animation: floaty 6s ease-in-out infinite;
   }
 
+  .animate-marquee {
+    animation: marquee 28s linear infinite;
+  }
+
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+
   .cta-shadow {
     box-shadow:
       0 12px 40px hsl(var(--fire) / 0.3),
@@ -326,6 +334,21 @@
   }
   66% {
     transform: translateY(-5px) rotate(-1deg);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
   }
 }
 

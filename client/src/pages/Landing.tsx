@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ServiceCard } from "@/components/ServiceCard";
+import { TrustedCompanies } from "@/components/TrustedCompanies";
 import { ContactForm } from "@/components/ContactForm";
 import { FooterNewsletter } from "@/components/FooterNewsletter";
 import { MetaManager } from "@/components/MetaManager";
@@ -414,6 +415,8 @@ export default function Landing() {
             </div>
           </div>
         </section>
+
+        <TrustedCompanies />
 
         {/* SERVICES */}
         <section id="services" className="relative" data-testid="section-services">
