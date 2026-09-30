@@ -5,6 +5,7 @@ import { ArrowUpRight } from "lucide-react";
 export function ServiceCard(props: {
   title: string;
   description: string;
+  closer: string;
   icon: React.ReactNode;
   onLearnMore: () => void;
   "data-testid"?: string;
@@ -70,7 +71,7 @@ export function ServiceCard(props: {
 
         <div className="mt-6 h-px w-full bg-gradient-to-r from-border/0 via-border/80 to-border/0 transition-all duration-500 group-hover:via-primary/40" />
         <p className="mt-4 text-xs text-muted-foreground/80 transition-colors duration-300 group-hover:text-muted-foreground">
-          Clear next steps. Practical guidance. Attorney-led support.
+          {props.closer}
         </p>
       </div>
     </motion.div>

@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div className="min-h-screen bg-legal-mesh">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16">
-        <div className="rounded-[2rem] border border-border/70 bg-card/70 p-8 sm:p-10 shadow-xl shadow-black/10 backdrop-blur grain-overlay">
+        <div className="rounded-3xl border border-border/70 bg-card/70 p-8 sm:p-10 shadow-xl shadow-black/10 backdrop-blur grain-overlay">
           <div className="grid place-items-center text-center">
             <div className="grid h-14 w-14 place-items-center rounded-3xl bg-gradient-to-br from-secondary to-secondary/70 text-secondary-foreground shadow-lg shadow-secondary/20">
               <FileX2 className="h-6 w-6" />

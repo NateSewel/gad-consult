@@ -78,46 +78,55 @@ const SERVICES = [
     title: "Corporate Law & Regulatory Compliance",
     description: "Structure, governance, and compliance guidance for startups and growing businesses.",
     icon: <Building2 className="h-5 w-5" />,
+    closer: "Governance structures that hold up to regulator scrutiny.",
   },
   {
     title: "Fintech & Tech",
     description: "Legal support for fintech and technology companies navigating a fast-moving regulatory landscape.",
     icon: <Cpu className="h-5 w-5" />,
+    closer: "Regulatory fluency for products that move faster than the rulebook.",
   },
   {
     title: "Fintech Licenses",
     description: "Licensing strategy and regulatory filings to get fintech ventures operating compliantly.",
     icon: <FileCheck className="h-5 w-5" />,
+    closer: "Filed correctly the first time — no resubmission delays.",
   },
   {
     title: "Intellectual Property",
     description: "Protect your brand, creative works, and innovations with smart filings and strategy.",
     icon: <Sparkles className="h-5 w-5" />,
+    closer: "Filed and defended — not just advised on.",
   },
   {
     title: "Taxation",
     description: "Practical tax advisory to keep your business compliant and efficiently structured.",
     icon: <Calculator className="h-5 w-5" />,
+    closer: "Structured to stay compliant without overpaying.",
   },
   {
     title: "Sports & Entertainment",
     description: "Contracts, rights, and representation for athletes, artists, and entertainment ventures.",
     icon: <Trophy className="h-5 w-5" />,
+    closer: "Contracts that protect the deal after the handshake.",
   },
   {
     title: "Corporate & Commercial Litigation",
     description: "Strategic representation — negotiation first, courtroom-ready when needed.",
     icon: <Gavel className="h-5 w-5" />,
+    closer: "A negotiation-first approach that still shows up ready to litigate.",
   },
   {
     title: "Data Protection & Privacy",
     description: "Navigate data protection requirements with clear, actionable compliance steps.",
     icon: <Shield className="h-5 w-5" />,
+    closer: "Compliance steps you can actually implement, not just a checklist.",
   },
   {
     title: "Real Estate",
     description: "Due diligence, documentation, and transaction support for property matters.",
     icon: <Landmark className="h-5 w-5" />,
+    closer: "Due diligence that catches what a title search alone won't.",
   },
 ] as const;
 
@@ -495,6 +504,7 @@ export default function Landing() {
                   key={s.title}
                   title={s.title}
                   description={s.description}
+                  closer={s.closer}
                   icon={s.icon}
                   onLearnMore={() => onLearnMore(s.title)}
                   data-testid={`service-${idx + 1}`}
@@ -567,7 +577,7 @@ export default function Landing() {
               </div>
 
               <div className="lg:col-span-7" data-testid="about-right">
-                <div className="rounded-[2rem] border border-border/70 bg-card p-7 sm:p-8 shadow-xl shadow-black/10 grain-overlay">
+                <div className="rounded-3xl border border-border/70 bg-card p-7 sm:p-8 shadow-xl shadow-black/10 grain-overlay">
                   <div className="flex flex-col sm:flex-row items-start gap-6">
                     <div className="grid h-14 w-14 place-items-center rounded-3xl bg-gradient-to-br from-secondary to-secondary/70 text-secondary-foreground shadow-lg shadow-secondary/20">
                       <Scale className="h-6 w-6" />
@@ -760,7 +770,7 @@ export default function Landing() {
         {/* CTA BAND */}
         <section className="relative" data-testid="section-cta-band">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-14 lg:py-16">
-            <div className="relative overflow-hidden rounded-[2rem] border border-border/50 bg-gradient-to-br from-secondary/95 to-secondary/70 p-7 sm:p-10 shadow-xl shadow-secondary/20 grain-overlay">
+            <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-secondary/95 to-secondary/70 p-7 sm:p-10 shadow-xl shadow-secondary/20 grain-overlay">
               <div className="absolute inset-0 opacity-70">
                 <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-white/10 blur-2xl" />
                 <div className="absolute -bottom-28 -left-28 h-80 w-80 rounded-full bg-primary/25 blur-3xl" />
