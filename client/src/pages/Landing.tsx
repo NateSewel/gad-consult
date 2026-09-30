@@ -27,6 +27,7 @@ import {
   MapPin,
   MessageSquare,
   PhoneCall,
+  Quote,
   Scale,
   Shield,
   Sparkles,
@@ -169,6 +170,33 @@ const FAQS = [
   {
     q: "What are your office hours?",
     a: "Monday to Friday, 9:00am to 5:00pm. For anything time-sensitive outside those hours, flag it as urgent in your message.",
+  },
+] as const;
+
+const TESTIMONIALS = [
+  {
+    name: "Paul Nwankwo",
+    service: null,
+    quote:
+      "It has been reassuring and effective working with you — from the first conversation, we felt confident we were in capable hands, and that consistency hasn't wavered.",
+  },
+  {
+    name: "Arinze Anthony Eziokwu",
+    service: "Registration of Company CAC",
+    quote:
+      "Excellent from start to finish. The CAC registration process was handled efficiently and with clear communication at every step — exactly what we needed to get our company up and running without delay.",
+  },
+  {
+    name: "Godson Iyela",
+    service: "Business Attorney",
+    quote:
+      "Smooth and great. GAD Legal Consult brought clarity and professionalism to matters that could easily have gotten complicated, and we always felt well represented.",
+  },
+  {
+    name: "TWJ",
+    service: "Legal Counsel",
+    quote:
+      "Awesome experience overall. Reliable legal counsel we can count on, with sound advice that gave us real confidence in our decisions.",
   },
 ] as const;
 
@@ -672,6 +700,33 @@ export default function Landing() {
           <div className="h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
         </section>
 
+        {/* TESTIMONIALS */}
+        <section className="relative" data-testid="section-testimonials">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
+            <SectionHeading
+              eyebrow="Client Reviews"
+              title="What our clients say."
+              align="center"
+              data-testid="testimonials-heading"
+            />
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+              variants={staggerContainer}
+              className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6"
+              data-testid="testimonials-grid"
+            >
+              {TESTIMONIALS.map((t, idx) => (
+                <TestimonialCard key={t.name} name={t.name} service={t.service} quote={t.quote} testId={`testimonial-card-${idx + 1}`} />
+              ))}
+            </motion.div>
+          </div>
+
+          <div className="h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
+        </section>
+
         {/* FAQ */}
         <section id="faq" className="relative" data-testid="section-faq">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
@@ -1041,6 +1096,27 @@ function FeatureLine(props: { icon: React.ReactNode; title: string; desc: string
           <div className="text-sm font-semibold">{props.title}</div>
           <div className="mt-1 text-xs text-muted-foreground leading-relaxed">{props.desc}</div>
         </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function TestimonialCard(props: { name: string; service: string | null; quote: string; testId: string }) {
+  return (
+    <motion.div
+      variants={fadeInUp}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      whileHover={{ y: -8, transition: { duration: 0.3 } }}
+      className="group rounded-3xl border border-border/70 bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-border"
+      data-testid={props.testId}
+    >
+      <Quote className="h-6 w-6 text-primary/40" />
+      <p className="mt-3 text-base leading-relaxed text-foreground" data-testid={`${props.testId}-quote`}>
+        "{props.quote}"
+      </p>
+      <div className="mt-4 text-sm">
+        <div className="font-semibold" data-testid={`${props.testId}-name`}>{props.name}</div>
+        {props.service ? <div className="text-muted-foreground">{props.service}</div> : null}
       </div>
     </motion.div>
   );
