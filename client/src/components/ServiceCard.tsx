@@ -12,7 +12,6 @@ export function ServiceCard(props: {
 }) {
   return (
     <div
-      data-reveal
       className={cn(
         "group relative overflow-hidden rounded-3xl border border-border/70 bg-card p-7 shadow-sm",
         "transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-xl hover:border-primary/30",

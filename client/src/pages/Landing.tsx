@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SectionHeading } from "@/components/SectionHeading";
-import { ServiceCard } from "@/components/ServiceCard";
+import { ServicesCarousel } from "@/components/ServicesCarousel";
 import { TrustedCompanies } from "@/components/TrustedCompanies";
 import { ContactForm } from "@/components/ContactForm";
 import { FooterNewsletter } from "@/components/FooterNewsletter";
@@ -401,7 +401,7 @@ export default function Landing() {
         <TrustedCompanies />
 
         {/* SERVICES */}
-        <section id="services" className="relative" data-testid="section-services">
+        <section id="services" className="relative overflow-x-clip" data-testid="section-services">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
             <div className="flex flex-col lg:flex-row items-start justify-between gap-10">
               <SectionHeading
@@ -436,22 +436,7 @@ export default function Landing() {
               </div>
             </div>
 
-            <div
-              className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-              data-testid="services-grid"
-            >
-              {SERVICES.map((s, idx) => (
-                <ServiceCard
-                  key={s.title}
-                  title={s.title}
-                  description={s.description}
-                  closer={s.closer}
-                  icon={s.icon}
-                  onLearnMore={() => onLearnMore(s.title)}
-                  data-testid={`service-${idx + 1}`}
-                />
-              ))}
-            </div>
+            <ServicesCarousel items={SERVICES} onLearnMore={onLearnMore} />
           </div>
 
           <div className="h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
