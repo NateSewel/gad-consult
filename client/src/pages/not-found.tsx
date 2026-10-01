@@ -14,7 +14,7 @@ export default function NotFound() {
               Page not found
             </h1>
             <p className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed" data-testid="notfound-desc">
-              The page you’re looking for doesn’t exist — or was moved.
+              The page you’re looking for doesn’t exist, or was moved.
             </p>
 
             <Link

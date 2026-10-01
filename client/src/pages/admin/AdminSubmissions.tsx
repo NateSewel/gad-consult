@@ -74,7 +74,7 @@ export default function AdminSubmissions() {
                 <span data-testid={`admin-submission-email-${submission.id}`}>{submission.email}</span>
                 <span data-testid={`admin-submission-phone-${submission.id}`}>{submission.phone}</span>
                 <span data-testid={`admin-submission-service-${submission.id}`}>
-                  {submission.serviceInterestedIn ?? "—"}
+                  {submission.serviceInterestedIn ?? "-"}
                 </span>
               </div>
               <p

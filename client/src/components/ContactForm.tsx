@@ -132,7 +132,7 @@ export function ContactForm(props: { site?: SiteConfigResponse | null }) {
           <Field
             label="Service interested in"
             testId="contact-service"
-            helper="Optional — helps us route your request."
+            helper="Optional. Helps us route your request."
             error={form.formState.errors.serviceInterestedIn?.message}
           >
             <select

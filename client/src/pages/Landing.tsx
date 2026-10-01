@@ -62,13 +62,13 @@ const SERVICES = [
     title: "Fintech Licenses",
     description: "Licensing strategy and regulatory filings to get fintech ventures operating compliantly.",
     icon: <FileCheck className="h-5 w-5" />,
-    closer: "Filed correctly the first time — no resubmission delays.",
+    closer: "Filed correctly the first time, with no resubmission delays.",
   },
   {
     title: "Intellectual Property",
     description: "Protect your brand, creative works, and innovations with smart filings and strategy.",
     icon: <Sparkles className="h-5 w-5" />,
-    closer: "Filed and defended — not just advised on.",
+    closer: "Filed and defended, not just advised on.",
   },
   {
     title: "Taxation",
@@ -84,7 +84,7 @@ const SERVICES = [
   },
   {
     title: "Corporate & Commercial Litigation",
-    description: "Strategic representation — negotiation first, courtroom-ready when needed.",
+    description: "Strategic representation with a negotiation-first approach, courtroom-ready when needed.",
     icon: <Gavel className="h-5 w-5" />,
     closer: "A negotiation-first approach that still shows up ready to litigate.",
   },
@@ -112,7 +112,7 @@ const PROCESS_STEPS = [
   {
     step: "01",
     title: "Share what's going on",
-    desc: "Tell us about your situation through the contact form — the more context, the faster we can help.",
+    desc: "Tell us about your situation through the contact form. The more context, the faster we can help.",
     icon: <MessageSquare className="h-5 w-5" />,
   },
   {
@@ -124,7 +124,7 @@ const PROCESS_STEPS = [
   {
     step: "03",
     title: "Move forward with confidence",
-    desc: "From there, we schedule a consultation and get to work — with clarity on scope and timeline.",
+    desc: "From there, we schedule a consultation and get to work, with clarity on scope and timeline.",
     icon: <ArrowRight className="h-5 w-5" />,
   },
 ] as const;
@@ -148,7 +148,7 @@ const FAQS = [
   },
   {
     q: "What happens after I submit the contact form?",
-    a: "We review your message and respond with next steps — including guidance, timelines, and what to prepare for a consultation.",
+    a: "We review your message and respond with next steps, including guidance, timelines, and what to prepare for a consultation.",
   },
   {
     q: "What if my matter is urgent?",
@@ -165,13 +165,13 @@ const TESTIMONIALS = [
     name: "Paul Nwankwo",
     service: null,
     quote:
-      "It has been reassuring and effective working with you — from the first conversation, we felt confident we were in capable hands, and that consistency hasn't wavered.",
+      "It has been reassuring and effective working with you. From the first conversation, we felt confident we were in capable hands, and that consistency hasn't wavered.",
   },
   {
     name: "Arinze Anthony Eziokwu",
     service: "Registration of Company CAC",
     quote:
-      "Excellent from start to finish. The CAC registration process was handled efficiently and with clear communication at every step — exactly what we needed to get our company up and running without delay.",
+      "Excellent from start to finish. The CAC registration process was handled efficiently and with clear communication at every step, exactly what we needed to get our company up and running without delay.",
   },
   {
     name: "Godson Iyela",
@@ -211,7 +211,7 @@ export default function Landing() {
   const phones = [contact?.phone ?? "+2348166084797", contact?.altPhone ?? "+2347082651713"];
   const social = site?.social;
 
-  const title = seo?.title ?? "GAD Consult — Trusted Counsel for Modern Nigeria";
+  const title = seo?.title ?? "GAD Consult | Trusted Counsel for Modern Nigeria";
   const description =
     seo?.description ??
     "GAD Consult helps individuals and businesses navigate Nigerian legal matters with clarity, strategy, and confidence. Schedule a consultation today.";
@@ -259,7 +259,7 @@ export default function Landing() {
     scrollToId("contact");
     toast({
       title: "Schedule your consultation",
-      description: "Share a few details below — we’ll follow up with times and next steps.",
+      description: "Share a few details below, and we’ll follow up with times and next steps.",
     });
   }
 
@@ -447,7 +447,7 @@ export default function Landing() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
             <SectionHeading
               title="A simple path from first message to next steps."
-              description="No jargon, no runaround — just a clear process from the moment you reach out."
+              description="No jargon, no runaround. Just a clear process from the moment you reach out."
               align="center"
               data-testid="how-it-works-heading"
             />
@@ -496,7 +496,7 @@ export default function Landing() {
 
               <div className="lg:col-span-7" data-testid="about-right">
                 <div className="grid gap-3" data-testid="about-points">
-                  <FeatureLine icon={<BadgeCheck className="h-4 w-4" />} title="Clarity first" desc="You’ll understand options, risk, and next steps — in plain language." />
+                  <FeatureLine icon={<BadgeCheck className="h-4 w-4" />} title="Clarity first" desc="You’ll understand options, risk, and next steps, in plain language." />
                   <FeatureLine icon={<Shield className="h-4 w-4" />} title="Discretion always" desc="Sensitive matters handled with confidentiality and professionalism." />
                   <FeatureLine icon={<Timer className="h-4 w-4" />} title="Momentum matters" desc="We prioritize the actions that unblock your timeline and protect your position." />
                 </div>
@@ -509,7 +509,7 @@ export default function Landing() {
                     <div className="min-w-0">
                       <div className="text-sm font-semibold text-white">Our promise</div>
                       <p className="mt-1 text-sm text-white/85 leading-relaxed">
-                        You’ll leave with a clearer picture of risk, options, and what to do next — not legal fog.
+                        You’ll leave with a clearer picture of risk, options, and what to do next, not legal fog.
                       </p>
                     </div>
                   </div>
@@ -624,11 +624,11 @@ export default function Landing() {
               data-testid="why-grid"
             >
               <WhyCard icon={<Shield className="h-5 w-5" />} title="Risk-aware guidance" desc="We help you anticipate issues and document decisions properly." closer="The paper trail that protects you if things go sideways." />
-              <WhyCard icon={<Handshake className="h-5 w-5" />} title="Human, not robotic" desc="We explain clearly and collaborate with respect for your time." closer="No jargon dumps — just a straight answer to your question." />
+              <WhyCard icon={<Handshake className="h-5 w-5" />} title="Human, not robotic" desc="We explain clearly and collaborate with respect for your time." closer="No jargon dumps, just a straight answer to your question." />
               <WhyCard icon={<Landmark className="h-5 w-5" />} title="Nigeria-context expertise" desc="Practical advice grounded in the realities of local systems." closer="Built for how things actually work here, not a textbook." />
               <WhyCard icon={<FileSignature className="h-5 w-5" />} title="Documents that hold up" desc="Contracts and filings built to be enforceable, not generic." closer="Reviewed for the clause that gets argued over later." />
               <WhyCard icon={<Gavel className="h-5 w-5" />} title="Dispute readiness" desc="Strong positions and a negotiation-first mindset." closer="Positioned to settle fast, or hold firm if it goes further." />
-              <WhyCard icon={<Timer className="h-5 w-5" />} title="Momentum-focused" desc="The work that unlocks your next milestone — prioritized." closer="Fewer status-check emails, more actual progress." />
+              <WhyCard icon={<Timer className="h-5 w-5" />} title="Momentum-focused" desc="The work that unlocks your next milestone, prioritized." closer="Fewer status-check emails, more actual progress." />
             </div>
           </div>
 
@@ -706,7 +706,7 @@ export default function Landing() {
                     Ready to move with confidence?
                   </h3>
                   <p className="mt-3 text-sm sm:text-base text-white/85 leading-relaxed max-w-2xl" data-testid="cta-band-desc">
-                    If you’re dealing with uncertainty, risk, or documentation — a short conversation can save time and protect your position.
+                    If you’re dealing with uncertainty, risk, or documentation, a short conversation can save time and protect your position.
                   </p>
                 </div>
 
@@ -742,7 +742,7 @@ export default function Landing() {
               <div className="lg:col-span-5" data-testid="contact-left">
                 <SectionHeading
                   title="Tell us what’s happening. We’ll respond with next steps."
-                  description="Provide the essentials — we’ll reply with guidance, timelines, and what to prepare for a consultation."
+                  description="Provide the essentials, and we’ll reply with guidance, timelines, and what to prepare for a consultation."
                   data-testid="contact-heading"
                 />
 

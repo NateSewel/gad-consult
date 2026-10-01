@@ -131,7 +131,7 @@ export default function Blog() {
           >
             {search
               ? "No posts match your search."
-              : "No posts published yet — check back soon."}
+              : "No posts published yet. Check back soon."}
           </div>
         )}
 
