@@ -1,6 +1,11 @@
 import { type FormEvent, useState } from "react";
 import { useLocation } from "wouter";
 import { useAdminLogin } from "@/hooks/use-admin";
+import { BrandMark } from "@/components/BrandMark";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { adminFieldClass } from "@/components/AdminStates";
 
 export default function AdminLogin() {
   const [, navigate] = useLocation();
@@ -15,59 +20,90 @@ export default function AdminLogin() {
     try {
       await login.mutateAsync({ email, password });
       navigate("/admin");
-    } catch {
-      setError("Invalid email or password.");
+    } catch (err) {
+      // Only a 401 means the credentials were wrong; anything else is a
+      // connection or server problem and shouldn't send people re-typing.
+      const message = err instanceof Error ? err.message : "";
+      const serverResponded = /^\d{3}:/.test(message);
+      setError(
+        message.startsWith("401:")
+          ? "Invalid email or password."
+          : serverResponded
+            ? "Sign-in isn't working right now. Try again in a moment."
+            : "Couldn't reach the server. Check your connection and try again.",
+      );
     }
   }
 
   return (
-    <div className="min-h-screen grid place-items-center bg-background px-4">
+    <main className="grid min-h-screen place-items-center bg-background px-4">
       <form
         onSubmit={onSubmit}
-        className="w-full max-w-sm rounded-3xl border border-border/70 bg-card p-6 sm:p-8 shadow-lg shadow-black/5"
+        className="w-full max-w-sm rounded-3xl border border-border/70 bg-card p-6 shadow-lg shadow-black/5 sm:p-8"
         data-testid="admin-login-form"
       >
-        <h1 className="text-2xl font-semibold" data-testid="admin-login-title">
+        <BrandMark className="w-fit dark:rounded-lg dark:bg-white dark:px-2 dark:py-1" />
+        <h1 className="mt-6 text-2xl font-semibold" data-testid="admin-login-title">
           Admin login
         </h1>
         <div className="mt-6 grid gap-4">
-          <label className="grid gap-1.5">
-            <div className="text-sm font-semibold text-foreground/90">Email</div>
-            <input
+          <div className="grid gap-1.5">
+            <Label htmlFor="admin-login-email" className="text-sm font-semibold">
+              Email
+            </Label>
+            <Input
+              id="admin-login-email"
               type="email"
+              name="email"
+              autoComplete="username"
               required
+              autoFocus
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-2xl border-2 border-border/70 bg-background px-4 py-3 text-sm"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "admin-login-error" : undefined}
+              className={adminFieldClass}
               data-testid="admin-login-email"
             />
-          </label>
-          <label className="grid gap-1.5">
-            <div className="text-sm font-semibold text-foreground/90">Password</div>
-            <input
+          </div>
+          <div className="grid gap-1.5">
+            <Label htmlFor="admin-login-password" className="text-sm font-semibold">
+              Password
+            </Label>
+            <Input
+              id="admin-login-password"
               type="password"
+              name="password"
+              autoComplete="current-password"
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-2xl border-2 border-border/70 bg-background px-4 py-3 text-sm"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "admin-login-error" : undefined}
+              className={adminFieldClass}
               data-testid="admin-login-password"
             />
-          </label>
+          </div>
           {error ? (
-            <div className="text-sm font-semibold text-destructive" data-testid="admin-login-error">
+            <div
+              id="admin-login-error"
+              role="alert"
+              className="text-sm font-semibold text-admin-danger"
+              data-testid="admin-login-error"
+            >
               {error}
             </div>
           ) : null}
-          <button
+          <Button
             type="submit"
             disabled={login.isPending}
-            className="mt-2 rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground shadow-md disabled:opacity-60"
+            className="mt-2 min-h-11 rounded-xl"
             data-testid="admin-login-submit"
           >
             {login.isPending ? "Signing in…" : "Sign in"}
-          </button>
+          </Button>
         </div>
       </form>
-    </div>
+    </main>
   );
 }

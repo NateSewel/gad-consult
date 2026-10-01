@@ -1,13 +1,62 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, type BlogPostInput, type BlogPostUpdateInput, type BlogPostResponse, type SubmissionResponse } from "@shared/routes";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+
+const SESSION_EXPIRED = "Your session has expired. Sign in again.";
+
+/** Mark the session as signed out so AdminLayout redirects to the login page. */
+function markSignedOut() {
+  queryClient.setQueryData([api.admin.me.path], false);
+}
+
+/**
+ * Turn an error thrown by apiRequest (`409: {"message":"..."}`) or a query into
+ * a sentence a person can read. Never returns the raw status/JSON string.
+ */
+export function getAdminErrorMessage(err: unknown, fallback: string): string {
+  const raw = err instanceof Error ? err.message : "";
+  const match = raw.match(/^(\d{3}): ([\s\S]*)$/);
+  if (!match) {
+    // Browser network failures surface as "Failed to fetch" / "Load failed".
+    const isNetwork = /failed to fetch|load failed|networkerror/i.test(raw);
+    return raw && !isNetwork ? raw : fallback;
+  }
+  const [, status, body] = match;
+  if (status === "401") return SESSION_EXPIRED;
+  try {
+    const parsed = JSON.parse(body);
+    if (typeof parsed?.message === "string" && parsed.message) return parsed.message;
+  } catch {
+    // body was not JSON; fall through
+  }
+  return fallback;
+}
+
+function onMutationError(err: unknown) {
+  if (err instanceof Error && err.message.startsWith("401:")) markSignedOut();
+}
+
+/** GET an admin endpoint. A 401 flips the cached session so the UI redirects to login. */
+async function adminGet<T>(url: string, failure: string): Promise<T> {
+  const res = await fetch(url, { credentials: "include" });
+  if (res.status === 401) {
+    markSignedOut();
+    throw new Error(SESSION_EXPIRED);
+  }
+  if (!res.ok) throw new Error(failure);
+  return (await res.json()) as T;
+}
 
 export function useAdminMe() {
   return useQuery({
     queryKey: [api.admin.me.path],
     queryFn: async () => {
       const res = await fetch(api.admin.me.path, { credentials: "include" });
-      return res.ok;
+      if (res.ok) return true;
+      // Only a 401 means "signed out". Anything else (5xx, offline) is an
+      // error the layout can show with a retry, not a silent redirect.
+      if (res.status === 401) return false;
+      throw new Error("Could not check your session.");
     },
   });
 }
@@ -40,7 +89,14 @@ export function useAdminLogout() {
       await apiRequest("POST", api.admin.logout.path);
     },
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: [api.admin.me.path] });
+      // Drop cached admin data so it can't be read back on a shared machine.
+      qc.removeQueries({
+        predicate: (q) =>
+          typeof q.queryKey[0] === "string" &&
+          q.queryKey[0].startsWith("/api/admin/") &&
+          q.queryKey[0] !== api.admin.me.path,
+      });
+      qc.setQueryData([api.admin.me.path], false);
     },
   });
 }
@@ -48,22 +104,14 @@ export function useAdminLogout() {
 export function useAdminPosts() {
   return useQuery({
     queryKey: [api.admin.posts.list.path],
-    queryFn: async () => {
-      const res = await fetch(api.admin.posts.list.path, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch posts");
-      return (await res.json()) as BlogPostResponse[];
-    },
+    queryFn: () => adminGet<BlogPostResponse[]>(api.admin.posts.list.path, "Could not load posts."),
   });
 }
 
 export function useAdminPost(id: number | undefined) {
   return useQuery({
     queryKey: [api.admin.posts.list.path, id],
-    queryFn: async () => {
-      const res = await fetch(`/api/admin/posts/${id}`, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch post");
-      return (await res.json()) as BlogPostResponse;
-    },
+    queryFn: () => adminGet<BlogPostResponse>(`/api/admin/posts/${id}`, "Could not load this post."),
     enabled: typeof id === "number" && !Number.isNaN(id),
   });
 }
@@ -78,6 +126,7 @@ export function useCreateAdminPost() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: [api.admin.posts.list.path] });
     },
+    onError: onMutationError,
   });
 }
 
@@ -91,6 +140,7 @@ export function useUpdateAdminPost(id: number) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: [api.admin.posts.list.path] });
     },
+    onError: onMutationError,
   });
 }
 
@@ -103,16 +153,14 @@ export function useDeleteAdminPost() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: [api.admin.posts.list.path] });
     },
+    onError: onMutationError,
   });
 }
 
 export function useAdminSubmissions() {
   return useQuery({
     queryKey: [api.admin.submissions.list.path],
-    queryFn: async () => {
-      const res = await fetch(api.admin.submissions.list.path, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch submissions");
-      return (await res.json()) as SubmissionResponse[];
-    },
+    queryFn: () =>
+      adminGet<SubmissionResponse[]>(api.admin.submissions.list.path, "Could not load submissions."),
   });
 }

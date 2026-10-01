@@ -451,3 +451,27 @@
     inset: -1px;
   }
 }
+
+/* Admin-only readable text tones. The raw brand tokens fall below 4.5:1 as
+   small text on dark cards (fire 3.8:1, navy 1.7:1) and destructive falls
+   below it on light cards (4.1:1), so the admin UI uses these instead. */
+@layer utilities {
+  .text-admin-accent {
+    color: hsl(359 84% 44%);
+  }
+  .text-admin-danger {
+    color: hsl(0 72% 40%);
+  }
+  .text-admin-navy {
+    color: hsl(var(--navy));
+  }
+  .dark .text-admin-accent {
+    color: hsl(359 100% 72%);
+  }
+  .dark .text-admin-danger {
+    color: hsl(0 100% 74%);
+  }
+  .dark .text-admin-navy {
+    color: hsl(234 100% 82%);
+  }
+}
