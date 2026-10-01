@@ -48,13 +48,13 @@ const SEED_SEO_PAGES: SeoPageResponse[] = [
     slug: "home",
     title: "GAD Consult | Modern Legal Solutions",
     description:
-      "Modern legal solutions for business success. Expert counsel in corporate law, fintech compliance, tax advisory, real estate, data privacy, arbitration, and litigation.",
+      "Expert legal counsel for businesses: corporate law, contracts, tech and fintech, tax, intellectual property, sports and entertainment, data protection, real estate and mining.",
   },
   {
     slug: "services",
     title: "Services | GAD Consult",
     description:
-      "Explore GAD Consult services: tax advisory, fintech licensing, company registration, international registration, data privacy, real estate, arbitration, and civil litigation.",
+      "Explore GAD Consult services: corporate law and compliance, contracts and legal drafting, tech and fintech, fintech licences, intellectual property, tax, sports and entertainment, litigation, data protection, real estate and mining.",
   },
   {
     slug: "about",

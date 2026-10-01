@@ -142,7 +142,8 @@ export function ContactForm(props: { site?: SiteConfigResponse | null }) {
             >
               <option value="">Select a service</option>
               <option value="Corporate Law & Regulatory Compliance">Corporate Law & Regulatory Compliance</option>
-              <option value="Fintech & Tech">Fintech & Tech</option>
+              <option value="Contracts & Legal Drafting">Contracts & Legal Drafting</option>
+              <option value="Tech & Fintech">Tech & Fintech</option>
               <option value="Fintech Licenses">Fintech Licenses</option>
               <option value="Intellectual Property">Intellectual Property</option>
               <option value="Taxation">Taxation</option>
@@ -150,6 +151,7 @@ export function ContactForm(props: { site?: SiteConfigResponse | null }) {
               <option value="Corporate & Commercial Litigation">Corporate & Commercial Litigation</option>
               <option value="Data Protection & Privacy">Data Protection & Privacy</option>
               <option value="Real Estate">Real Estate</option>
+              <option value="Mining">Mining</option>
             </select>
           </Field>
         </div>

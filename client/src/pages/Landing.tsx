@@ -22,12 +22,14 @@ import {
   Cpu,
   FileCheck,
   FileSignature,
+  FilePen,
   Gavel,
   Handshake,
   Landmark,
   MapPin,
   MessageSquare,
   PhoneCall,
+  Pickaxe,
   Quote,
   Scale,
   Shield,
@@ -45,7 +47,13 @@ const SERVICES = [
     closer: "Governance structures that hold up to regulator scrutiny.",
   },
   {
-    title: "Fintech & Tech",
+    title: "Contracts & Legal Drafting",
+    description: "Clear, enforceable agreements drafted and reviewed so your deals are protected from the start.",
+    icon: <FilePen className="h-5 w-5" />,
+    closer: "Drafted to be enforced, not just signed.",
+  },
+  {
+    title: "Tech & Fintech",
     description: "Legal support for fintech and technology companies navigating a fast-moving regulatory landscape.",
     icon: <Cpu className="h-5 w-5" />,
     closer: "Regulatory fluency for products that move faster than the rulebook.",
@@ -92,6 +100,12 @@ const SERVICES = [
     icon: <Landmark className="h-5 w-5" />,
     closer: "Due diligence that catches what a title search alone won't.",
   },
+  {
+    title: "Mining",
+    description: "Licensing, agreements, and regulatory compliance support for mining ventures and investors.",
+    icon: <Pickaxe className="h-5 w-5" />,
+    closer: "Rights and obligations settled before the first dig.",
+  },
 ] as const;
 
 const PROCESS_STEPS = [
@@ -118,19 +132,19 @@ const PROCESS_STEPS = [
 const FAQS = [
   {
     q: "What areas of law do you handle?",
-    a: "Corporate advisory, contract drafting and review, litigation and dispute resolution, property and real estate, employment and HR, regulatory compliance, intellectual property, and family and personal matters. If you're unsure where your situation fits, describe it in the contact form and we'll route you to the right service.",
+    a: "Corporate law and regulatory compliance, contracts and legal drafting, tech and fintech, fintech licences, intellectual property, taxation, sports and entertainment, corporate and commercial litigation, data protection and privacy, real estate, and mining. If you're unsure where your situation fits, describe it in the contact form and we'll route you to the right service.",
   },
   {
     q: "Do you work with individuals, businesses, or both?",
-    a: "Both. We advise startups and growing businesses on corporate and compliance matters, and support individuals with contracts, property, family, and personal legal needs.",
+    a: "Both. We advise startups, growing businesses, and established companies on corporate, contract, and compliance matters, and support individuals with contracts, property, and other legal needs.",
   },
   {
     q: "Is my information kept confidential?",
     a: "Yes. Sensitive matters are handled with discretion and professionalism, and contacting us does not create an attorney–client relationship until that's explicitly established.",
   },
   {
-    q: "Where are you based — do you work outside Plateau State?",
-    a: "We're based in Jos, Plateau State, Nigeria, and work with businesses and individuals across Nigeria and beyond.",
+    q: "Where are you based, and do you work outside Plateau State?",
+    a: "Our head office is in Jos, Plateau State, and we have major operations across Abuja, Lagos, Port Harcourt, Ibadan, and other parts of Nigeria, as well as Africa, the US, the UK, Canada, and globally.",
   },
   {
     q: "What happens after I submit the contact form?",
@@ -315,7 +329,7 @@ export default function Landing() {
                 className="mt-6 max-w-2xl text-base sm:text-lg lg:text-xl text-white/75 leading-relaxed drop-shadow"
                 data-testid="hero-description"
               >
-                Expert legal counsel in corporate law, contract, tech, fintech, regulatory compliance, tax advisory, intellectual property, sports & entertainment, data protection and real estate. Trusted by businesses across Nigeria, Africa and beyond.
+                Expert legal counsel in corporate law, contract, tech, fintech, regulatory compliance, tax advisory, intellectual property, sports & entertainment, data protection, real estate and mining. Trusted by businesses across Nigeria, Africa and beyond.
               </p>
 
               <div
@@ -560,7 +574,7 @@ export default function Landing() {
                       Victor founded GAD Consult on a simple idea: businesses shouldn't have to choose between good legal advice and getting on with running the business. He works alongside founders and operators to spot legal risk early, so it gets handled before it becomes a problem.
                     </p>
                     <p>
-                      His practice spans corporate and contract work, tech and fintech, regulatory compliance, tax advisory, intellectual property, sports and entertainment, data protection and real estate. Clients range from start-ups to established companies across Nigeria and beyond.
+                      His practice spans corporate and contract work, tech and fintech, regulatory compliance, tax advisory, intellectual property, sports and entertainment, data protection, real estate and mining. Clients range from start-ups to established companies across Nigeria and beyond.
                     </p>
                     <p>
                       Based in Jos, Plateau State, Victor holds to one standard: clear advice in plain language, honest about the risks, with practical next steps and no legal fog.
@@ -574,7 +588,7 @@ export default function Landing() {
                     </div>
                     <div className="rounded-2xl border border-border/70 bg-card px-4 py-3">
                       <dt className="text-xs font-semibold text-muted-foreground">Practice</dt>
-                      <dd className="mt-1 text-sm font-semibold text-foreground">Corporate · Fintech · Compliance · IP · Real estate</dd>
+                      <dd className="mt-1 text-sm font-semibold text-foreground">Corporate · Contracts · Tech & Fintech · IP · Real estate · Mining</dd>
                     </div>
                   </dl>
 
@@ -614,7 +628,7 @@ export default function Landing() {
         <section className="relative" data-testid="section-why">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
             <SectionHeading
-              title="A sharper process — built around your outcomes."
+              title="A sharper process built around your outcomes."
               description="We don’t just advise. We map the path, reduce uncertainty, and execute with professional precision."
               align="center"
               data-testid="why-heading"
@@ -855,12 +869,12 @@ export default function Landing() {
                       Confidential
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-full border border-border/70 bg-muted/60 px-3 py-1.5">
-                      <Gavel className="h-3.5 w-3.5 text-secondary" />
-                      Dispute-ready
+                      <Timer className="h-3.5 w-3.5 text-secondary" />
+                      Speedy
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-full border border-border/70 bg-muted/60 px-3 py-1.5">
-                      <FileSignature className="h-3.5 w-3.5 text-secondary" />
-                      Document-focused
+                      <BriefcaseBusiness className="h-3.5 w-3.5 text-secondary" />
+                      Practical Solutions
                     </span>
                   </div>
 

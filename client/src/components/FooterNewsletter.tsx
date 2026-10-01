@@ -64,7 +64,7 @@ export function FooterNewsletter() {
             Get the brief
           </div>
           <p className="mt-1 text-xs text-muted-foreground leading-relaxed" data-testid="newsletter-subtitle">
-            Occasional legal updates — concise, practical, and worth your time.
+            Regular legal updates, concise, practical, and worth your time.
           </p>
         </div>
       </div>
