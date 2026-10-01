@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "wouter";
+import { scrollToId } from "@/lib/gsap";
 
 export function ScrollToAnchor() {
   const [location] = useLocation();
@@ -9,10 +10,7 @@ export function ScrollToAnchor() {
     if (!id) return;
 
     // Defer to allow layout paint / images / fonts.
-    const t = window.setTimeout(() => {
-      const el = document.getElementById(id);
-      el?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 50);
+    const t = window.setTimeout(() => scrollToId(id), 50);
 
     return () => window.clearTimeout(t);
   }, [location]);

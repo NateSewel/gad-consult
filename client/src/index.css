@@ -151,7 +151,7 @@
   --elevate-2: rgba(255, 255, 255, 0.10);
 }
 
-.dark .bg-legal-mesh {
+.dark .bg-legal-mesh::before {
   background:
     radial-gradient(1400px 800px at 15% 10%, hsl(var(--navy) / 0.25), transparent 65%),
     radial-gradient(1000px 700px at 85% 25%, hsl(var(--fire) / 0.22), transparent 60%),
@@ -164,10 +164,6 @@
     @apply border-border;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-  
   html,
   body {
     transition: background-color 300ms ease-out, color 300ms ease-out;
@@ -207,7 +203,17 @@
     font-family: var(--font-sans);
   }
 
+  /* Gradients live on a fixed, viewport-sized layer: on the tall page root they were repainted
+     every frame while content height animated (accordion), causing 500ms+ stalls. */
   .bg-legal-mesh {
+    isolation: isolate;
+  }
+  .bg-legal-mesh::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
     background:
       radial-gradient(1400px 800px at 15% 10%, hsl(var(--navy) / 0.15), transparent 65%),
       radial-gradient(1000px 700px at 85% 25%, hsl(var(--fire) / 0.18), transparent 60%),

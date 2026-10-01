@@ -1,6 +1,5 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link } from "wouter";
-import { motion, useScroll, useTransform } from "framer-motion";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ServiceCard } from "@/components/ServiceCard";
@@ -8,10 +7,12 @@ import { TrustedCompanies } from "@/components/TrustedCompanies";
 import { ContactForm } from "@/components/ContactForm";
 import { FooterNewsletter } from "@/components/FooterNewsletter";
 import { MetaManager } from "@/components/MetaManager";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { FaqAccordion } from "@/components/FaqAccordion";
 import { useSeo, useSiteConfig } from "@/hooks/use-public";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { scrollToId, scrollToTop } from "@/lib/gsap";
+import { useReveal, useHeroIntro, useConnectorDraw } from "@/hooks/use-reveal";
 import {
   ArrowRight,
   BadgeCheck,
@@ -35,43 +36,6 @@ import {
   Trophy,
   Mail,
 } from "lucide-react";
-
-// Animation variants
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1 },
-};
-
-const scaleIn = {
-  hidden: { opacity: 0, scale: 0.9 },
-  visible: { opacity: 1, scale: 1 },
-};
-
-const slideInLeft = {
-  hidden: { opacity: 0, x: -30 },
-  visible: { opacity: 1, x: 0 },
-};
-
-const slideInRight = {
-  hidden: { opacity: 0, x: 30 },
-  visible: { opacity: 1, x: 0 },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-};
 
 const SERVICES = [
   {
@@ -209,17 +173,16 @@ const TESTIMONIALS = [
   },
 ] as const;
 
-function scrollToId(id: string) {
-  const el = document.getElementById(id);
-  el?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 export default function Landing() {
   const { toast } = useToast();
   const { data: site } = useSiteConfig();
   const { data: seo } = useSeo("home");
 
   const [serviceFocus, setServiceFocus] = useState<string | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  useHeroIntro(rootRef);
+  useConnectorDraw(rootRef);
+  useReveal(rootRef);
 
   const org = site?.organization;
   const contact = site?.contact;
@@ -287,7 +250,7 @@ export default function Landing() {
   }
 
   return (
-    <div className="min-h-screen bg-legal-mesh">
+    <div ref={rootRef} className="min-h-screen bg-legal-mesh">
       <MetaManager
         title={title}
         description={description}
@@ -305,126 +268,89 @@ export default function Landing() {
       <main>
         {/* HERO */}
         <section id="home" className="relative min-h-[600px] lg:min-h-[700px] flex items-center overflow-hidden" data-testid="section-home">
-          <motion.img
+          <img
             src="/images/hero-bg.jpg"
             alt=""
-            initial={{ scale: 1.1 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="absolute inset-0 h-full w-full object-cover"
+            data-hero="bg"
+            className="absolute left-0 top-[-15%] h-[130%] w-full object-cover will-change-transform"
             loading="eager"
             aria-hidden="true"
           />
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
+          <div
+            data-hero="veil"
             className="absolute inset-0 bg-gradient-to-b from-[#2B348C]/85 via-[#2B348C]/75 to-[#111111]/90"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/20" />
 
           <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-28">
             <div className="max-w-3xl">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              <div
+                data-hero="kicker"
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-white/90 backdrop-blur-sm"
               >
-                <motion.div
-                  animate={{ rotate: [0, 360] }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                >
-                  <Scale className="h-3.5 w-3.5" />
-                </motion.div>
+                <Scale className="h-3.5 w-3.5" />
                 <span data-testid="hero-kicker">A modern Law Firm to meet Modern needs</span>
-              </motion.div>
+              </div>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              <h1
+                data-hero="title"
                 className="mt-6 text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-6xl leading-[1.05] text-white drop-shadow-lg"
                 data-testid="hero-title"
               >
                 Modern Legal Solutions for Your{" "}
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
-                  className="text-[#F69899]"
-                >
-                  Business
-                </motion.span>{" "}
+                <span className="text-[#F69899]">Business</span>{" "}
                 Success
-              </motion.h1>
+              </h1>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              <p
+                data-hero="desc"
                 className="mt-6 max-w-2xl text-base sm:text-lg lg:text-xl text-white/75 leading-relaxed drop-shadow"
                 data-testid="hero-description"
               >
                 Expert legal counsel in corporate law, fintech compliance, tax advisory, and real estate. Trusted by businesses across Nigeria and beyond.
-              </motion.p>
+              </p>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              <div
+                data-hero="ctas"
                 className="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
                 data-testid="hero-cta-row"
               >
-                <motion.button
+                <button
                   type="button"
                   onClick={onSchedule}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
                   className={cn(
                     "group inline-flex items-center justify-center gap-2 rounded-2xl px-7 py-4 text-sm font-semibold",
                     "bg-primary text-primary-foreground border border-primary-border",
                     "shadow-lg shadow-red-900/30 hover:shadow-xl hover:shadow-red-900/40",
                     "focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/30",
-                    "transition-shadow duration-200 ease-out",
+                    "transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]",
                   )}
                   data-testid="hero-primary-cta"
                 >
                   Schedule Consultation
-                  <motion.div
-                    animate={{ x: [0, 3, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <ArrowRight className="h-4 w-4" />
-                  </motion.div>
-                </motion.button>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+                </button>
 
-                <motion.button
+                <button
                   type="button"
                   onClick={() => scrollToId("services")}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="rounded-2xl border border-white/30 bg-white/10 backdrop-blur-sm px-7 py-4 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-white/20 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/20"
+                  className="active:scale-[0.98] hover:-translate-y-0.5 rounded-2xl border border-white/30 bg-white/10 backdrop-blur-sm px-7 py-4 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-white/20 hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-white/20"
                   data-testid="hero-secondary-cta"
                 >
                   Explore Our Services
-                </motion.button>
-              </motion.div>
+                </button>
+              </div>
 
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.7 }}
+              <p
+                data-hero="trust"
                 className="mt-4 text-xs text-white/60"
                 data-testid="hero-trust-line"
               >
                 Confidential · No obligation to proceed
-              </motion.p>
+              </p>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              <div
+                data-hero="stats"
                 className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4"
                 data-testid="hero-stats"
               >
@@ -433,22 +359,19 @@ export default function Landing() {
                   { icon: BriefcaseBusiness, title: "Practical Expertise", desc: "Strategy that delivers", testId: "hero-stat-2" },
                   { icon: BadgeCheck, title: "Proven Results", desc: "Trusted by businesses", testId: "hero-stat-3" },
                 ].map((stat, idx) => (
-                  <motion.div
+                  <div
                     key={stat.testId}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5, delay: 0.9 + idx * 0.1 }}
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/8 backdrop-blur-sm px-4 py-3 cursor-default"
+                    data-hero="stat"
+                    className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/8 backdrop-blur-sm px-4 py-3 cursor-default transition-transform duration-300 hover:-translate-y-0.5"
                   >
                     <stat.icon className="h-5 w-5 text-white/70 shrink-0" />
                     <div>
                       <div className="text-sm font-semibold text-white" data-testid={stat.testId}>{stat.title}</div>
                       <div className="text-xs text-white/55">{stat.desc}</div>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
@@ -491,11 +414,7 @@ export default function Landing() {
               </div>
             </div>
 
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+            <div
               className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
               data-testid="services-grid"
             >
@@ -510,7 +429,7 @@ export default function Landing() {
                   data-testid={`service-${idx + 1}`}
                 />
               ))}
-            </motion.div>
+            </div>
           </div>
 
           <div className="h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
@@ -527,20 +446,15 @@ export default function Landing() {
             />
 
             <div className="relative mt-14">
-              <div className="pointer-events-none absolute left-[16.6%] right-[16.6%] top-[1.375rem] hidden h-px bg-border md:block" />
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, margin: "-100px" }}
-                variants={staggerContainer}
+              <div data-connector className="pointer-events-none absolute left-[16.6%] right-[16.6%] top-[1.375rem] hidden h-px bg-border md:block" />
+              <div
                 className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6"
                 data-testid="how-it-works-grid"
               >
                 {PROCESS_STEPS.map((step) => (
-                  <motion.div
+                  <div
                     key={step.step}
-                    variants={fadeInUp}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    data-reveal
                     className="flex items-start gap-4 md:flex-col md:items-center md:text-center"
                     data-testid={`how-it-works-step-${step.step}`}
                   >
@@ -552,9 +466,9 @@ export default function Landing() {
                       <div className="mt-1 text-lg font-semibold leading-tight">{step.title}</div>
                       <p className="mt-2 text-sm text-muted-foreground leading-relaxed md:mx-auto md:max-w-[220px]">{step.desc}</p>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
-              </motion.div>
+              </div>
             </div>
           </div>
 
@@ -643,11 +557,7 @@ export default function Landing() {
               data-testid="team-heading"
             />
 
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+            <div
               className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
               data-testid="team-grid"
             >
@@ -673,7 +583,7 @@ export default function Landing() {
                 bio="Chukwudi specialises in real estate law, civil litigation, and arbitration — delivering strategic representation with a negotiation-first mindset."
                 testId="team-card-member-2"
               />
-            </motion.div>
+            </div>
           </div>
 
           <div className="h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
@@ -689,11 +599,7 @@ export default function Landing() {
               data-testid="why-heading"
             />
 
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+            <div
               className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
               data-testid="why-grid"
             >
@@ -703,7 +609,7 @@ export default function Landing() {
               <WhyCard icon={<FileSignature className="h-5 w-5" />} title="Documents that hold up" desc="Contracts and filings built to be enforceable, not generic." closer="Reviewed for the clause that gets argued over later." />
               <WhyCard icon={<Gavel className="h-5 w-5" />} title="Dispute readiness" desc="Strong positions and a negotiation-first mindset." closer="Positioned to settle fast, or hold firm if it goes further." />
               <WhyCard icon={<Timer className="h-5 w-5" />} title="Momentum-focused" desc="The work that unlocks your next milestone — prioritized." closer="Fewer status-check emails, more actual progress." />
-            </motion.div>
+            </div>
           </div>
 
           <div className="h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
@@ -718,11 +624,7 @@ export default function Landing() {
               data-testid="testimonials-heading"
             />
 
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
-              variants={staggerContainer}
+            <div
               className="mt-10 space-y-6"
               data-testid="testimonials-grid"
             >
@@ -738,7 +640,7 @@ export default function Landing() {
                   <TestimonialCard key={t.name} name={t.name} service={t.service} quote={t.quote} testId={`testimonial-card-${idx + 2}`} />
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
 
           <div className="h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
@@ -753,27 +655,13 @@ export default function Landing() {
               data-testid="faq-heading"
             />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            <div
+              data-reveal
               className="mt-10 mx-auto max-w-3xl rounded-3xl border border-border/70 bg-card px-5 sm:px-7 shadow-sm"
               data-testid="faq-list"
             >
-              <Accordion type="single" collapsible>
-                {FAQS.map((faq, idx) => (
-                  <AccordionItem key={faq.q} value={`faq-${idx}`} data-testid={`faq-item-${idx + 1}`}>
-                    <AccordionTrigger className="text-left text-sm sm:text-base font-semibold hover:no-underline">
-                      {faq.q}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
-                      {faq.a}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </motion.div>
+              <FaqAccordion items={FAQS} />
+            </div>
           </div>
 
           <div className="h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
@@ -831,14 +719,7 @@ export default function Landing() {
         <section id="contact" className="relative" data-testid="section-contact">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="lg:col-span-5"
-                data-testid="contact-left"
-              >
+              <div className="lg:col-span-5" data-testid="contact-left">
                 <SectionHeading
                   title="Tell us what’s happening. We’ll respond with next steps."
                   description="Provide the essentials — we’ll reply with guidance, timelines, and what to prepare for a consultation."
@@ -879,7 +760,7 @@ export default function Landing() {
                     actionLabel="Copy"
                     testId="contact-address-card"
                   />
-                  <div className="rounded-3xl border border-border/70 bg-card/70 p-5 shadow-sm backdrop-blur" data-testid="contact-hours">
+                  <div data-reveal className="rounded-3xl border border-border/70 bg-card/70 p-5 shadow-sm backdrop-blur" data-testid="contact-hours">
                     <div className="flex items-start gap-3">
                       <div className="grid h-11 w-11 place-items-center rounded-2xl bg-muted text-secondary shadow-inner ring-1 ring-border/60">
                         <Timer className="h-5 w-5" />
@@ -910,39 +791,27 @@ export default function Landing() {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="lg:col-span-7"
-                data-testid="contact-right"
-              >
+              <div data-reveal className="lg:col-span-7" data-testid="contact-right">
                 <ContactForm site={site ?? null} />
                 {serviceFocus ? (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="mt-4 rounded-2xl border border-border/60 bg-muted/60 px-4 py-3 text-xs text-muted-foreground"
+                  <div
+                    className="mt-4 rounded-2xl animate-in fade-in slide-in-from-bottom-1 duration-300  border border-border/60 bg-muted/60 px-4 py-3 text-xs text-muted-foreground"
                     data-testid="service-focus-note"
                   >
                     Tip: You tapped <span className="font-semibold text-foreground/80">{serviceFocus}</span>. Mention it in your message for faster routing.
-                    <motion.button
+                    <button
                       type="button"
                       onClick={() => setServiceFocus(null)}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
                       className="ml-2 rounded-lg px-2 py-1 font-semibold text-secondary hover:bg-muted/80 transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/10"
                       data-testid="service-focus-clear"
                     >
                       Clear
-                    </motion.button>
-                  </motion.div>
+                    </button>
+                  </div>
                 ) : null}
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
@@ -1016,7 +885,7 @@ export default function Landing() {
               </div>
               <button
                 type="button"
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                onClick={scrollToTop}
                 className="rounded-xl px-3 py-2 font-semibold text-secondary hover:bg-muted/70 transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/10"
                 data-testid="back-to-top"
               >
@@ -1039,39 +908,27 @@ function TeamCard(props: {
   testId: string;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ y: -8, transition: { duration: 0.3 } }}
+    <div
+      data-reveal
       className={cn(
-        "group rounded-3xl border bg-card shadow-sm transition-all duration-300 hover:shadow-lg",
+        "group rounded-3xl border bg-card shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-lg",
         props.isFounder ? "border-primary/30" : "border-border/70",
       )}
       data-testid={props.testId}
     >
       <div className="relative aspect-[4/5] overflow-hidden rounded-t-3xl">
-        <motion.img
+        <img
           src={props.imageSrc}
           alt={props.name}
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.4 }}
-          className="h-full w-full object-cover object-top"
+          className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
           loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
         {props.isFounder && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.4 }}
-            className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-lg"
-          >
+          <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-lg">
             <Scale className="h-3 w-3" />
             Founder
-          </motion.div>
+          </div>
         )}
       </div>
       <div className="p-5">
@@ -1085,45 +942,35 @@ function TeamCard(props: {
           {props.bio}
         </p>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function FeatureLine(props: { icon: React.ReactNode; title: string; desc: string }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ x: 4, transition: { duration: 0.2 } }}
-      className="rounded-3xl border border-border/70 bg-card/70 p-5 shadow-sm backdrop-blur transition-all duration-300 hover:shadow-md"
+    <div
+      data-reveal
+      className="group rounded-3xl border border-border/70 bg-card/70 p-5 shadow-sm backdrop-blur transition-all duration-300 hover:translate-x-1 hover:shadow-md"
     >
       <div className="flex items-start gap-3">
-        <motion.div
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          transition={{ duration: 0.3 }}
-          className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary/75 text-primary-foreground shadow-md shadow-primary/20"
-        >
+        <div className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-primary to-primary/75 text-primary-foreground shadow-md shadow-primary/20 transition-transform duration-300 group-hover:scale-105">
           {props.icon}
-        </motion.div>
+        </div>
         <div className="min-w-0">
           <div className="text-sm font-semibold">{props.title}</div>
           <div className="mt-1 text-xs text-muted-foreground leading-relaxed">{props.desc}</div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function TestimonialCard(props: { name: string; service: string | null; quote: string; testId: string; featured?: boolean }) {
   return (
-    <motion.div
-      variants={fadeInUp}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ y: -8, transition: { duration: 0.3 } }}
+    <div
+      data-reveal
       className={cn(
-        "group rounded-3xl border border-border/70 bg-card shadow-sm transition-all duration-300 hover:shadow-lg hover:border-border",
+        "group rounded-3xl border border-border/70 bg-card shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-lg hover:border-border",
         props.featured ? "p-8 sm:p-10" : "p-6",
       )}
       data-testid={props.testId}
@@ -1139,54 +986,36 @@ function TestimonialCard(props: { name: string; service: string | null; quote: s
         <div className="font-semibold" data-testid={`${props.testId}-name`}>{props.name}</div>
         {props.service ? <div className="text-muted-foreground">{props.service}</div> : null}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function AboutChip(props: { icon: React.ReactNode; title: string; desc: string }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="rounded-3xl border border-border/60 bg-background/60 p-4 shadow-inner"
-    >
+    <div data-reveal className="group rounded-3xl border border-border/60 bg-background/60 p-4 shadow-inner">
       <div className="flex items-start gap-3">
-        <motion.div
-          whileHover={{ rotate: 12, scale: 1.1 }}
-          transition={{ duration: 0.3 }}
-          className="grid h-10 w-10 place-items-center rounded-2xl bg-muted text-secondary ring-1 ring-border/60"
-        >
+        <div className="grid h-10 w-10 place-items-center rounded-2xl bg-muted text-secondary ring-1 ring-border/60 transition-transform duration-300 group-hover:scale-105">
           {props.icon}
-        </motion.div>
+        </div>
         <div className="min-w-0">
           <div className="text-sm font-semibold">{props.title}</div>
           <div className="mt-0.5 text-xs text-muted-foreground leading-relaxed">{props.desc}</div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function WhyCard(props: { icon: React.ReactNode; title: string; desc: string; closer: string }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.3 } }}
-      className="group rounded-3xl border border-border/70 bg-card p-6 shadow-sm transition-all duration-300 hover:shadow-lg hover:border-border"
+    <div
+      data-reveal
+      className="group rounded-3xl border border-border/70 bg-card p-6 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-lg hover:border-border"
     >
       <div className="flex items-start gap-3">
-        <motion.div
-          whileHover={{ rotate: 12, scale: 1.15 }}
-          transition={{ duration: 0.3 }}
-          className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-secondary/95 to-secondary/70 text-secondary-foreground shadow-md shadow-secondary/15 ring-1 ring-white/10"
-        >
+        <div className="grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-secondary/95 to-secondary/70 text-secondary-foreground shadow-md shadow-secondary/15 ring-1 ring-white/10 transition-transform duration-300 group-hover:scale-105">
           {props.icon}
-        </motion.div>
+        </div>
         <div className="min-w-0">
           <div className="text-lg leading-tight">{props.title}</div>
           <div className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{props.desc}</div>
@@ -1194,7 +1023,7 @@ function WhyCard(props: { icon: React.ReactNode; title: string; desc: string; cl
       </div>
       <div className="mt-5 h-px w-full bg-gradient-to-r from-border/0 via-border/90 to-border/0" />
       <div className="mt-4 text-xs text-muted-foreground">{props.closer}</div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -1207,24 +1036,16 @@ function InfoCard(props: {
   testId: string;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      whileHover={{ x: 4, transition: { duration: 0.2 } }}
-      className="rounded-3xl border border-border/70 bg-card/70 p-5 shadow-sm backdrop-blur"
+    <div
+      data-reveal
+      className="group rounded-3xl border border-border/70 bg-card/70 p-5 shadow-sm backdrop-blur transition-transform duration-200 hover:translate-x-1"
       data-testid={props.testId}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3 min-w-0">
-          <motion.div
-            whileHover={{ scale: 1.1, rotate: 5 }}
-            transition={{ duration: 0.3 }}
-            className="grid h-11 w-11 place-items-center rounded-2xl bg-muted text-secondary ring-1 ring-border/60 shadow-inner"
-          >
+          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-muted text-secondary ring-1 ring-border/60 shadow-inner transition-transform duration-300 group-hover:scale-105">
             {props.icon}
-          </motion.div>
+          </div>
           <div className="min-w-0">
             <div className="text-xs font-semibold text-muted-foreground">{props.label}</div>
             <div className="mt-1 text-sm font-semibold text-foreground/90 break-words" data-testid={`${props.testId}-value`}>
@@ -1233,18 +1054,16 @@ function InfoCard(props: {
           </div>
         </div>
 
-        <motion.button
+        <button
           type="button"
           onClick={props.onClick}
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-          className="shrink-0 rounded-xl border border-border/70 bg-card px-3 py-2 text-xs font-semibold text-foreground/85 shadow-sm hover:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/10"
+          className="active:scale-95 hover:-translate-y-0.5 shrink-0 rounded-xl border border-border/70 bg-card px-3 py-2 text-xs font-semibold text-foreground/85 shadow-sm hover:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/10"
           data-testid={`${props.testId}-action`}
         >
           {props.actionLabel}
-        </motion.button>
+        </button>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

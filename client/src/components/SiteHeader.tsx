@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { scrollToId } from "@/lib/gsap";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { BrandMark } from "@/components/BrandMark";
@@ -16,11 +17,6 @@ const NAV = [
   { label: "Contact", href: "#contact", testId: "nav-contact" },
 ] as const;
 
-function scrollToId(id: string) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
-}
 
 export function SiteHeader(props: {
   site?: SiteConfigResponse | null;
@@ -49,13 +45,27 @@ export function SiteHeader(props: {
       return;
     }
     const id = href.replace("#", "");
+    if (open) {
+      // The mobile menu lives inside the sticky header: measuring now would use
+      // the expanded height as the scroll offset, and its 300ms collapse shifts
+      // the page mid-scroll. Collapse first, then scroll.
+      setOpen(false);
+      window.setTimeout(() => scrollToId(id), 320);
+      return;
+    }
     scrollToId(id);
-    setOpen(false);
   }
 
   function handleScheduleClick() {
     if (location !== "/") {
+      setOpen(false);
       navigate("/#contact");
+      return;
+    }
+    if (open) {
+      // Same as handleNavClick: let the mobile menu collapse before measuring.
+      setOpen(false);
+      window.setTimeout(() => props.onSchedule(), 320);
       return;
     }
     props.onSchedule();
@@ -224,10 +234,7 @@ export function SiteHeader(props: {
                 </button>
                 <PrimaryCTA
                   label="Schedule Consultation"
-                  onClick={() => {
-                    setOpen(false);
-                    handleScheduleClick();
-                  }}
+                  onClick={handleScheduleClick}
                   data-testid="mobile-primary-cta"
                 />
               </div>
