@@ -24,15 +24,15 @@ export default function BlogPost() {
         description: post.excerpt,
         image: post.coverImageUrl || undefined,
         datePublished: post.publishedAt || undefined,
-        author: { "@type": "Person", name: "GAD Legal Consult" },
+        author: { "@type": "Person", name: "GAD Consult" },
       }
     : undefined;
 
   return (
     <div className="min-h-screen bg-background">
       <MetaManager
-        title={post ? `${post.title} | GAD Legal Consult` : "Blog | GAD Legal Consult"}
-        description={post?.excerpt ?? "GAD Legal Consult blog."}
+        title={post ? `${post.title} | GAD Consult` : "Blog | GAD Consult"}
+        description={post?.excerpt ?? "GAD Consult blog."}
         canonicalPath={`/blog/${params.slug}`}
         jsonLd={jsonLd}
       />

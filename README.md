@@ -1,6 +1,6 @@
-# GAD Legal Consult - Landing Page
+# GAD Consult - Landing Page
 
-A modern, professional landing page for GAD Legal Consult law firm. Built with React, TypeScript, Express, and Framer Motion animations.
+A modern, professional landing page for GAD Consult law firm. Built with React, TypeScript, Express, and Framer Motion animations.
 
 ## ✨ Features
 

@@ -27,7 +27,7 @@ export function SiteHeader(props: {
   const [location, navigate] = useLocation();
   const activeSection = useActiveSection(["home", "services", "about", "contact"]);
 
-  const orgName = props.site?.organization?.name ?? "GAD Legal Consult";
+  const orgName = props.site?.organization?.name ?? "GAD Consult";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);

@@ -1,5 +1,5 @@
 ---
-name: GAD Legal Consult
+name: GAD Consult
 description: Navy-and-firebrick marketing site for a Nigerian law firm — confident, approachable, momentum-focused
 colors:
   institutional-navy: "#2B348C"
@@ -62,7 +62,7 @@ components:
     padding: "24px"
 ---
 
-# Design System: GAD Legal Consult
+# Design System: GAD Consult
 
 ## 1. Overview
 

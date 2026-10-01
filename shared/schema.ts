@@ -93,6 +93,7 @@ export interface OrganizationProfile {
 
 export interface ContactInfo {
   phone?: string;
+  altPhone?: string;
   email?: string;
   address?: string;
   officeHours?: string;

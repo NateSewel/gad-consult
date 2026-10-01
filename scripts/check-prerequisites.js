@@ -45,7 +45,7 @@ function checkFile(path, name) {
 
 async function main() {
   log('\n' + '='.repeat(50), colors.blue);
-  log('GAD Legal Consult - Prerequisites Check', colors.bold);
+  log('GAD Consult - Prerequisites Check', colors.bold);
   log('='.repeat(50) + '\n', colors.blue);
 
   let allGood = true;

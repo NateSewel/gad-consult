@@ -46,27 +46,27 @@ export interface IStorage {
 const SEED_SEO_PAGES: SeoPageResponse[] = [
   {
     slug: "home",
-    title: "GAD Legal Consult | Modern Legal Solutions",
+    title: "GAD Consult | Modern Legal Solutions",
     description:
       "Modern legal solutions for business success. Expert counsel in corporate law, fintech compliance, tax advisory, real estate, data privacy, arbitration, and litigation.",
   },
   {
     slug: "services",
-    title: "Services | GAD Legal Consult",
+    title: "Services | GAD Consult",
     description:
-      "Explore GAD Legal Consult services: tax advisory, fintech licensing, company registration, international registration, data privacy, real estate, arbitration, and civil litigation.",
+      "Explore GAD Consult services: tax advisory, fintech licensing, company registration, international registration, data privacy, real estate, arbitration, and civil litigation.",
   },
   {
     slug: "about",
-    title: "About | GAD Legal Consult",
+    title: "About | GAD Consult",
     description:
-      "Founded by Victor Ayegbeni, GAD Legal Consult is a forward-thinking law firm built to meet modern legal and regulatory needs.",
+      "Founded by Victor Ayegbeni, GAD Consult is a forward-thinking law firm built to meet modern legal and regulatory needs.",
   },
   {
     slug: "contact",
-    title: "Contact | GAD Legal Consult",
+    title: "Contact | GAD Consult",
     description:
-      "Contact GAD Legal Consult to schedule a consultation. Share your needs and our team will respond promptly.",
+      "Contact GAD Consult to schedule a consultation. Share your needs and our team will respond promptly.",
   },
 ];
 
@@ -74,19 +74,20 @@ export class DatabaseStorage implements IStorage {
   async getPublicSiteConfig(): Promise<PublicSiteConfigResponse> {
     return {
       organization: {
-        name: "GAD Legal Consult",
+        name: "GAD Consult",
         tagline: "A modern Law Firm to meet Modern needs",
         founder: "Victor Ayegbeni",
       },
       contact: {
-        phone: undefined,
-        email: undefined,
+        phone: "+2348166084797",
+        altPhone: "+2347082651713",
+        email: "gadlegalconsult@gmail.com",
         address: "No. 4 Helen Gomwalk Way, off Old Airport Roundabout, Jos, Plateau State",
         officeHours: undefined,
       },
       social: {
-        instagram: undefined,
-        facebook: undefined,
+        instagram: "https://www.instagram.com/gadconsult",
+        facebook: "https://www.facebook.com/profile.php?id=100083608446454",
         youtube: undefined,
       },
     };

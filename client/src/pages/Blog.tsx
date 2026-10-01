@@ -54,8 +54,8 @@ export default function Blog() {
   return (
     <div className="min-h-screen bg-background">
       <MetaManager
-        title="Blog | GAD Legal Consult"
-        description="Insights and updates from GAD Legal Consult on corporate law, compliance, and practical legal strategy."
+        title="Blog | GAD Consult"
+        description="Insights and updates from GAD Consult on corporate law, compliance, and practical legal strategy."
         canonicalPath="/blog"
       />
 

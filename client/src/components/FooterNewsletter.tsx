@@ -115,7 +115,7 @@ export function FooterNewsletter() {
           </div>
         ) : (
           <div className="text-xs text-muted-foreground" data-testid="newsletter-helper">
-            By subscribing you agree to receive emails from GAD Legal Consult.
+            By subscribing you agree to receive emails from GAD Consult.
           </div>
         )}
       </form>

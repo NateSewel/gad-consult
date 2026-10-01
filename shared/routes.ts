@@ -79,6 +79,7 @@ export const api = {
           }),
           contact: z.object({
             phone: z.string().optional(),
+            altPhone: z.string().optional(),
             email: z.string().optional(),
             address: z.string().optional(),
             officeHours: z.string().optional(),

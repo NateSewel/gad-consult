@@ -163,7 +163,7 @@ const TESTIMONIALS = [
     name: "Godson Iyela",
     service: "Business Attorney",
     quote:
-      "Smooth and great. GAD Legal Consult brought clarity and professionalism to matters that could easily have gotten complicated, and we always felt well represented.",
+      "Smooth and great. GAD Consult brought clarity and professionalism to matters that could easily have gotten complicated, and we always felt well represented.",
   },
   {
     name: "TWJ",
@@ -171,6 +171,14 @@ const TESTIMONIALS = [
     quote:
       "Awesome experience overall. Reliable legal counsel we can count on, with sound advice that gave us real confidence in our decisions.",
   },
+] as const;
+
+// Victor's personal profiles (tracking params stripped from the shared links).
+const FOUNDER_SOCIALS = [
+  { label: "Instagram", href: "https://www.instagram.com/victor_ayegbeni" },
+  { label: "Facebook", href: "https://www.facebook.com/victor.momdu" },
+  { label: "YouTube", href: "https://youtube.com/@victor-ayegbeni" },
+  { label: "TikTok", href: "https://www.tiktok.com/@victor_ayegbeni" },
 ] as const;
 
 export default function Landing() {
@@ -186,15 +194,16 @@ export default function Landing() {
 
   const org = site?.organization;
   const contact = site?.contact;
+  const phones = [contact?.phone ?? "+2348166084797", contact?.altPhone ?? "+2347082651713"];
   const social = site?.social;
 
-  const title = seo?.title ?? "GAD Legal Consult — Trusted Counsel for Modern Nigeria";
+  const title = seo?.title ?? "GAD Consult — Trusted Counsel for Modern Nigeria";
   const description =
     seo?.description ??
-    "GAD Legal Consult helps individuals and businesses navigate Nigerian legal matters with clarity, strategy, and confidence. Schedule a consultation today.";
+    "GAD Consult helps individuals and businesses navigate Nigerian legal matters with clarity, strategy, and confidence. Schedule a consultation today.";
 
   const jsonLd = useMemo(() => {
-    const name = org?.name ?? "GAD Legal Consult";
+    const name = org?.name ?? "GAD Consult";
     const phone = contact?.phone;
     const email = contact?.email;
     const address = contact?.address;
@@ -289,7 +298,7 @@ export default function Landing() {
                 className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-white/90 backdrop-blur-sm"
               >
                 <Scale className="h-3.5 w-3.5" />
-                <span data-testid="hero-kicker">A modern Law Firm to meet Modern needs</span>
+                <span data-testid="hero-kicker">We are more than a law firm. We are your business partners</span>
               </div>
 
               <h1
@@ -297,9 +306,8 @@ export default function Landing() {
                 className="mt-6 text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-6xl leading-[1.05] text-white drop-shadow-lg"
                 data-testid="hero-title"
               >
-                Modern Legal Solutions for Your{" "}
-                <span className="text-[#F69899]">Business</span>{" "}
-                Success
+                Run Your Business.{" "}
+                <span className="text-[#F69899]">Leave the Risk to Us</span>
               </h1>
 
               <p
@@ -307,7 +315,7 @@ export default function Landing() {
                 className="mt-6 max-w-2xl text-base sm:text-lg lg:text-xl text-white/75 leading-relaxed drop-shadow"
                 data-testid="hero-description"
               >
-                Expert legal counsel in corporate law, fintech compliance, tax advisory, and real estate. Trusted by businesses across Nigeria and beyond.
+                Expert legal counsel in corporate law, contract, tech, fintech, regulatory compliance, tax advisory, intellectual property, sports & entertainment, data protection and real estate. Trusted by businesses across Nigeria, Africa and beyond.
               </p>
 
               <div
@@ -327,7 +335,7 @@ export default function Landing() {
                   )}
                   data-testid="hero-primary-cta"
                 >
-                  Schedule Consultation
+                  Get Clarity
                   <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
                 </button>
 
@@ -384,8 +392,8 @@ export default function Landing() {
             <div className="flex flex-col lg:flex-row items-start justify-between gap-10">
               <SectionHeading
                 eyebrow="Services"
-                title="Practical legal support across your key moments."
-                description="Select the area you need help with — we’ll guide you from uncertainty to clear next steps."
+                title="We protect your interest and help you navigate legal risks"
+                description="Select the area you need help with and we’ll guide you from uncertainty to clear next steps."
                 data-testid="services-heading"
               />
 
@@ -485,46 +493,13 @@ export default function Landing() {
                   description="Your matter deserves more than generic templates. We combine careful legal reasoning with practical execution."
                   data-testid="about-heading"
                 />
-
-                <div className="mt-8 grid gap-3" data-testid="about-points">
-                  <FeatureLine icon={<BadgeCheck className="h-4 w-4" />} title="Clarity first" desc="You’ll understand options, risk, and next steps — in plain language." />
-                  <FeatureLine icon={<Shield className="h-4 w-4" />} title="Discretion always" desc="Sensitive matters handled with confidentiality and professionalism." />
-                  <FeatureLine icon={<Timer className="h-4 w-4" />} title="Momentum matters" desc="We prioritize the actions that unblock your timeline and protect your position." />
-                </div>
               </div>
 
               <div className="lg:col-span-7" data-testid="about-right">
-                <div className="rounded-3xl border border-border/70 bg-card p-7 sm:p-8 shadow-xl shadow-black/10 grain-overlay">
-                  <div className="flex flex-col sm:flex-row items-start gap-6">
-                    <div className="grid h-14 w-14 place-items-center rounded-3xl bg-gradient-to-br from-secondary to-secondary/70 text-secondary-foreground shadow-lg shadow-secondary/20">
-                      <Scale className="h-6 w-6" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-xs font-semibold text-muted-foreground" data-testid="founder-kicker">
-                        Founder
-                      </div>
-                      <div className="mt-1 text-2xl leading-tight" data-testid="founder-name">
-                        Victor Ayegbeni
-                      </div>
-                      <p className="mt-3 text-sm text-muted-foreground leading-relaxed" data-testid="founder-bio">
-                        Victor leads GAD Legal Consult with a focus on practical outcomes — helping clients move from uncertainty to decisive action, whether that means drafting stronger contracts, navigating compliance, or resolving disputes strategically.
-                      </p>
-
-                      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3" data-testid="about-metrics">
-                        <AboutChip icon={<BriefcaseBusiness className="h-4 w-4" />} title="Business-minded counsel" desc="Legal strategy aligned to commercial reality." />
-                        <AboutChip icon={<Gavel className="h-4 w-4" />} title="Dispute confidence" desc="Prepared to negotiate — or litigate." />
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={onSchedule}
-                        className="mt-6 inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-primary to-primary/80 px-5 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/20"
-                        data-testid="about-cta"
-                      >
-                        Work with us <ArrowRight className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
+                <div className="grid gap-3" data-testid="about-points">
+                  <FeatureLine icon={<BadgeCheck className="h-4 w-4" />} title="Clarity first" desc="You’ll understand options, risk, and next steps — in plain language." />
+                  <FeatureLine icon={<Shield className="h-4 w-4" />} title="Discretion always" desc="Sensitive matters handled with confidentiality and professionalism." />
+                  <FeatureLine icon={<Timer className="h-4 w-4" />} title="Momentum matters" desc="We prioritize the actions that unblock your timeline and protect your position." />
                 </div>
 
                 <div className="mt-5 rounded-3xl border border-border/70 bg-gradient-to-br from-secondary/95 to-secondary/70 p-6 shadow-lg shadow-secondary/20" data-testid="about-quote">
@@ -550,39 +525,85 @@ export default function Landing() {
         {/* OUR TEAM */}
         <section id="team" className="relative" data-testid="section-team">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
-            <SectionHeading
-              title="The people behind your legal strategy."
-              description="A dedicated team of professionals committed to delivering clear, results-driven counsel."
-              align="center"
-              data-testid="team-heading"
-            />
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+              <div className="lg:col-span-5 lg:sticky lg:top-28" data-reveal data-testid="founder-portrait">
+                <div className="overflow-hidden rounded-3xl border border-primary/30 bg-card shadow-xl shadow-secondary/15 ring-1 ring-secondary/10">
+                  <img
+                    src="/images/team-founder.jpg"
+                    alt="Victor Ayegbeni, Founder/Lead Counsel"
+                    className="aspect-[4/5] w-full object-cover object-top"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
 
-            <div
-              className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-              data-testid="team-grid"
-            >
-              <TeamCard
-                imageSrc="/images/team-founder.jpg"
-                name="Victor Ayegbeni"
-                role="Founder & Principal Attorney"
-                bio="Victor leads GAD Legal Consult with a focus on practical outcomes — helping clients move from uncertainty to decisive action across corporate, fintech, and compliance matters."
-                isFounder
-                testId="team-card-founder"
-              />
-              <TeamCard
-                imageSrc="/images/team-member-1.jpg"
-                name="Adaeze Nwosu"
-                role="Associate Counsel"
-                bio="Adaeze brings meticulous attention to contract drafting, regulatory compliance, and data privacy — ensuring clients stay ahead of evolving legal requirements."
-                testId="team-card-member-1"
-              />
-              <TeamCard
-                imageSrc="/images/team-member-2.jpg"
-                name="Chukwudi Eze"
-                role="Senior Legal Advisor"
-                bio="Chukwudi specialises in real estate law, civil litigation, and arbitration — delivering strategic representation with a negotiation-first mindset."
-                testId="team-card-member-2"
-              />
+              <div className="lg:col-span-7 min-w-0">
+                <SectionHeading
+                  title="Meet the lawyer behind GAD Consult"
+                  align="left"
+                  data-testid="team-heading"
+                />
+
+                <div data-reveal className="mt-8">
+                  <div className="text-xs font-semibold uppercase tracking-wide text-primary" data-testid="founder-kicker">
+                    Founder/Lead Counsel
+                  </div>
+                  <div className="mt-2 font-display text-4xl sm:text-5xl leading-tight text-foreground" data-testid="founder-name">
+                    Victor Ayegbeni
+                  </div>
+                  <p className="mt-4 text-lg sm:text-xl text-foreground/90 leading-snug max-w-2xl">
+                    A lawyer who sits on your side of the table, as a business partner and not just counsel.
+                  </p>
+
+                  <div className="mt-6 space-y-4 text-base text-muted-foreground leading-relaxed max-w-2xl" data-testid="founder-bio">
+                    <p>
+                      Victor founded GAD Consult on a simple idea: businesses shouldn't have to choose between good legal advice and getting on with running the business. He works alongside founders and operators to spot legal risk early, so it gets handled before it becomes a problem.
+                    </p>
+                    <p>
+                      His practice spans corporate and contract work, tech and fintech, regulatory compliance, tax advisory, intellectual property, sports and entertainment, data protection and real estate. Clients range from start-ups to established companies across Nigeria and beyond.
+                    </p>
+                    <p>
+                      Based in Jos, Plateau State, Victor holds to one standard: clear advice in plain language, honest about the risks, with practical next steps and no legal fog.
+                    </p>
+                  </div>
+
+                  <dl className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl" data-testid="founder-facts">
+                    <div className="rounded-2xl border border-border/70 bg-card px-4 py-3">
+                      <dt className="text-xs font-semibold text-muted-foreground">Based in</dt>
+                      <dd className="mt-1 text-sm font-semibold text-foreground">Jos, Plateau State</dd>
+                    </div>
+                    <div className="rounded-2xl border border-border/70 bg-card px-4 py-3">
+                      <dt className="text-xs font-semibold text-muted-foreground">Practice</dt>
+                      <dd className="mt-1 text-sm font-semibold text-foreground">Corporate · Fintech · Compliance · IP · Real estate</dd>
+                    </div>
+                  </dl>
+
+                  <blockquote className="mt-8 max-w-2xl border-t border-border pt-5 text-foreground" data-testid="founder-quote">
+                    <span aria-hidden="true" className="block font-display text-6xl leading-none text-primary/60 select-none">“</span>
+                    <p className="-mt-2 font-display text-2xl sm:text-3xl leading-snug">Run your business. Leave the risk to us.</p>
+                  </blockquote>
+
+                  <div className="mt-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 max-w-2xl">
+                    <div data-testid="founder-social">
+                      <div className="text-xs font-semibold text-muted-foreground">Connect with Victor</div>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {FOUNDER_SOCIALS.map((s) => (
+                          <SocialBtn key={s.label} href={s.href} label={s.label} testId={`founder-social-${s.label.toLowerCase()}`} />
+                        ))}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={onSchedule}
+                      className="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-primary to-primary/80 px-5 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-0.5 active:translate-y-0 active:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/20"
+                      data-testid="founder-cta"
+                    >
+                      Talk to Victor <ArrowRight className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -730,10 +751,10 @@ export default function Landing() {
                   <InfoCard
                     icon={<PhoneCall className="h-5 w-5" />}
                     label="Phone"
-                    value={contact?.phone ?? "+234 800 000 0000"}
+                    value={phones.join("\n")}
                     onClick={() => {
-                      navigator.clipboard?.writeText(contact?.phone ?? "+234 800 000 0000");
-                      toast({ title: "Copied", description: "Phone number copied to clipboard." });
+                      navigator.clipboard?.writeText(phones.join(", "));
+                      toast({ title: "Copied", description: "Phone numbers copied to clipboard." });
                     }}
                     actionLabel="Copy"
                     testId="contact-phone-card"
@@ -741,9 +762,9 @@ export default function Landing() {
                   <InfoCard
                     icon={<Mail className="h-5 w-5" />}
                     label="Email"
-                    value={contact?.email ?? "info@gadlegal.example"}
+                    value={contact?.email ?? "gadlegalconsult@gmail.com"}
                     onClick={() => {
-                      navigator.clipboard?.writeText(contact?.email ?? "info@gadlegal.example");
+                      navigator.clipboard?.writeText(contact?.email ?? "gadlegalconsult@gmail.com");
                       toast({ title: "Copied", description: "Email copied to clipboard." });
                     }}
                     actionLabel="Copy"
@@ -787,7 +808,6 @@ export default function Landing() {
                     <div className="flex flex-wrap gap-2">
                       <SocialBtn href={social?.instagram} label="Instagram" testId="social-instagram" />
                       <SocialBtn href={social?.facebook} label="Facebook" testId="social-facebook" />
-                      <SocialBtn href={social?.youtube} label="YouTube" testId="social-youtube" />
                     </div>
                   </div>
                 </div>
@@ -823,7 +843,7 @@ export default function Landing() {
               <div className="lg:col-span-5" data-testid="footer-left">
                 <div className="rounded-3xl border border-border/60 bg-card/50 p-6 shadow-sm backdrop-blur">
                   <div className="font-display text-2xl leading-tight" data-testid="footer-brand">
-                    {org?.name ?? "GAD Legal Consult"}
+                    {org?.name ?? "GAD Consult"}
                   </div>
                   <p className="mt-2 text-sm text-muted-foreground leading-relaxed" data-testid="footer-desc">
                     {org?.tagline ??
@@ -881,7 +901,7 @@ export default function Landing() {
 
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
               <div data-testid="footer-copyright">
-                © {new Date().getFullYear()} {org?.name ?? "GAD Legal Consult"}. All rights reserved.
+                © {new Date().getFullYear()} {org?.name ?? "GAD Consult"}. All rights reserved.
               </div>
               <button
                 type="button"
@@ -895,53 +915,6 @@ export default function Landing() {
           </div>
         </footer>
       </main>
-    </div>
-  );
-}
-
-function TeamCard(props: {
-  imageSrc: string;
-  name: string;
-  role: string;
-  bio: string;
-  isFounder?: boolean;
-  testId: string;
-}) {
-  return (
-    <div
-      data-reveal
-      className={cn(
-        "group rounded-3xl border bg-card shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-lg",
-        props.isFounder ? "border-primary/30" : "border-border/70",
-      )}
-      data-testid={props.testId}
-    >
-      <div className="relative aspect-[4/5] overflow-hidden rounded-t-3xl">
-        <img
-          src={props.imageSrc}
-          alt={props.name}
-          className="h-full w-full object-cover object-top transition-transform duration-500 ease-out group-hover:scale-105"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-        {props.isFounder && (
-          <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-lg">
-            <Scale className="h-3 w-3" />
-            Founder
-          </div>
-        )}
-      </div>
-      <div className="p-5">
-        <div className="text-lg font-semibold leading-tight" data-testid={`${props.testId}-name`}>
-          {props.name}
-        </div>
-        <div className="mt-1 text-xs font-semibold text-primary" data-testid={`${props.testId}-role`}>
-          {props.role}
-        </div>
-        <p className="mt-3 text-sm text-muted-foreground leading-relaxed" data-testid={`${props.testId}-bio`}>
-          {props.bio}
-        </p>
-      </div>
     </div>
   );
 }
@@ -990,22 +963,6 @@ function TestimonialCard(props: { name: string; service: string | null; quote: s
   );
 }
 
-function AboutChip(props: { icon: React.ReactNode; title: string; desc: string }) {
-  return (
-    <div data-reveal className="group rounded-3xl border border-border/60 bg-background/60 p-4 shadow-inner">
-      <div className="flex items-start gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-2xl bg-muted text-secondary ring-1 ring-border/60 transition-transform duration-300 group-hover:scale-105">
-          {props.icon}
-        </div>
-        <div className="min-w-0">
-          <div className="text-sm font-semibold">{props.title}</div>
-          <div className="mt-0.5 text-xs text-muted-foreground leading-relaxed">{props.desc}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function WhyCard(props: { icon: React.ReactNode; title: string; desc: string; closer: string }) {
   return (
     <div
@@ -1048,7 +1005,7 @@ function InfoCard(props: {
           </div>
           <div className="min-w-0">
             <div className="text-xs font-semibold text-muted-foreground">{props.label}</div>
-            <div className="mt-1 text-sm font-semibold text-foreground/90 break-words" data-testid={`${props.testId}-value`}>
+            <div className="mt-1 text-sm font-semibold text-foreground/90 break-words whitespace-pre-line" data-testid={`${props.testId}-value`}>
               {props.value}
             </div>
           </div>

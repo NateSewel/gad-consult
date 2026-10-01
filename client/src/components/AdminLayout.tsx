@@ -77,12 +77,12 @@ export function AdminLayout(props: { children: ReactNode }) {
           {collapsed ? (
             <div
               className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary/10"
-              aria-label="GAD Legal Consult brand mark"
+              aria-label="GAD Consult brand mark"
               data-testid="admin-brand-mark-collapsed"
             >
               <img
                 src="/images/logo.png"
-                alt="GAD Legal Consult"
+                alt="GAD Consult"
                 className="h-8 w-8 object-cover object-left"
               />
             </div>
