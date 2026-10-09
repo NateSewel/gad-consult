@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SectionHeading } from "@/components/SectionHeading";
 import { ServicesCarousel } from "@/components/ServicesCarousel";
 import { TrustedCompanies } from "@/components/TrustedCompanies";
+import { MembershipBadges } from "@/components/MembershipBadges";
 import { ContactForm } from "@/components/ContactForm";
 import { FooterNewsletter } from "@/components/FooterNewsletter";
 import { MetaManager } from "@/components/MetaManager";
@@ -576,6 +577,8 @@ export default function Landing() {
                       <dd className="mt-1 text-sm font-semibold text-foreground">Corporate · Contracts · Tech & Fintech · IP · Real estate · Mining</dd>
                     </div>
                   </dl>
+
+                  <MembershipBadges />
 
                   <blockquote className="mt-8 max-w-2xl border-t border-border pt-5 text-foreground" data-testid="founder-quote">
                     <span aria-hidden="true" className="block font-display text-6xl leading-none text-primary/60 select-none">“</span>
