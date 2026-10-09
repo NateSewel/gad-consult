@@ -4,6 +4,11 @@ import brand2 from "../../../attached_assets/brand2.jpg";
 import brand3 from "../../../attached_assets/brand3.jpg";
 import brand4 from "../../../attached_assets/brand4.jpg";
 import brand5 from "../../../attached_assets/brand5.jpg";
+import brand6 from "../../../attached_assets/brand6.jpg";
+import brand7 from "../../../attached_assets/brand7.jpg";
+import brand8 from "../../../attached_assets/brand8.jpg";
+import brand9 from "../../../attached_assets/brand9.jpg";
+import brand10 from "../../../attached_assets/brand10.jpg";
 
 const LOGOS = [
   { src: brand1, alt: "Thulite Travels" },
@@ -11,6 +16,11 @@ const LOGOS = [
   { src: brand3, alt: "Myswoop" },
   { src: brand4, alt: "Onfleek" },
   { src: brand5, alt: "WJ Hub" },
+  { src: brand6, alt: "Nigerian Bar Association" },
+  { src: brand7, alt: "FintechNGR, Fintech Association of Nigeria" },
+  { src: brand8, alt: "Chartered Institute of Taxation of Nigeria" },
+  { src: brand9, alt: "NBA Section on Legal Practice" },
+  { src: brand10, alt: "NBA Section on Business Law" },
 ];
 
 function LogoRow({ ariaHidden }: { ariaHidden?: boolean }) {
